@@ -7,19 +7,21 @@
 ## 🏠 首頁功能介紹
 
 - 🛒 商品瀏覽
-- (./screenshot/product.png) 
+- ![商品預覽圖](./screenshot/product.png)
 - 🔐 會員登入 / 註冊
-(./screenshot/login.png) (./screenshot/regist.png) 
+![登入預覽圖](./screenshot/login.png) ![註冊預覽圖](./screenshot/register.png) 
 ---
 
 ## 🛠️ 管理後臺功能
 
 - 👥 會員管理畫面
+- ![預覽圖](./screenshot/member_control.png)
+- ![預覽圖](./screenshot/member_control_2.png)
 - 📦 商品管理畫面
+- ![預覽圖](./screenshot/product_control.png)
+- ![預覽圖](./screenshot/product_control_2.png)
 - 📊 後臺數據圖表視覺化
-
-> 預留後臺畫面圖示：
-> ![後臺管理畫面](./images/backend.png)
+- ![預覽圖](./screenshot/dashboard.png)
 
 ---
 
