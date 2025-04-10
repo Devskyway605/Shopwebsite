@@ -1,0 +1,36 @@
+@media screen and (max-width: 768px) {
+    body{
+        background-color: #2d84d4; 
+    }
+    .table-rwd thead {
+        display: none
+    }
+
+    .table-rwd tbody tr {
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .table-rwd tbody tr td {
+        display: block;
+        overflow: hidden;
+    }
+
+    .table-rwd tbody tr td::before {
+        content: attr(data-th) " : ";
+        display: block;
+        float: left;
+        text-align: right;
+        width: 30%;
+        padding-right: 20px;
+        color:var(--textcolor01);
+    }
+
+    .table-rwd tbody tr td .table-col {
+        display: block;
+        float: left;
+        width: 70%;
+        color: var(--textcolor01);
+    }
+}

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物首頁</title>
+    <!-- css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main_style.css" />
+    <link rel="stylesheet" href="css/roller.css">
+    <!-- font Awesome -->
+    <link rel="stylesheet" href="css/all.min.css" />
+    <!-- Animate css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- <script type="module" src="js/app.js"></script> -->
+    <script type="module" src="js/depart.js"></script>
+    <style>
+        #registerModal {
+            border-radius: 20px;
+        }
+
+        #loginModal {
+            border-radius: 20px;
+        }
+
+        #reg_link a {
+            color: #fff;
+        }
+
+        #reg_link a:hover {
+            color: #f6b354;
+        }
+
+        .bg-modal {
+            background-color: #424769;
+        }
+
+        .modal_register {
+            background-color: #424769;
+            height: 800px;
+            border-start-start-radius: 20px;
+            border-end-start-radius: 20px;
+        }
+
+        .modal_right_register {
+            border-start-end-radius: 20px;
+            border-end-end-radius: 20px;
+        }
+
+        .modal_left_login {
+            background-color: #424769;
+            height: 600px;
+            border-start-start-radius: 20px;
+            border-end-start-radius: 20px;
+        }
+
+        .modal_right_login {
+            background-image: url(img/web/loginmodal_background.jpg);
+            border-start-end-radius: 20px;
+            border-end-end-radius: 20px;
+        }
+
+        #ok_btn_reg {
+            background-color: #f6b354;
+            width: 150px;
+        }
+
+        #ok_btn_login {
+            background-color: #f6b354;
+            width: 150px;
+        }
+
+        /* box */
+        #box01 {
+            background-color: #585858;
+        }
+
+        #box01:hover {
+            height: 300px;
+            background-color: #e68888;
+            font-size: 30px;
+            transition: all, 1s;
+        }
+
+        #box02 {
+            background-color: #585858;
+        }
+
+        #box02:hover {
+            height: 300px;
+            background-color: #489973;
+            font-size: 30px;
+            transition: all, 1s;
+        }
+
+        #box03 {
+            background-color: #585858;
+        }
+
+        #box03:hover {
+            height: 300px;
+            background-color: #527ebe;
+            font-size: 30px;
+            transition: all, 1s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- header -->
+        <section>
+            <div class="container-fluid">
+                <!-- section navbar -->
+                <header>
+                    <nav class="navbar navbar-light bg-light navbar-expand-lg bg-body-tertiary fixed-top">
+                        <div class="container-fluid">
+                            <a class="navbar-brand ms-4" href="index.html">
+                                <img src="img/web/logo_sm.png" alt="">
+                            </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                                aria-labelledby="offcanvasNavbarLabel">
+                                <div class="offcanvas-header">
+                                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">導覽列</h5>
+                                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body container-fluid justify-content-center" id="offcanvasNavbar">
+                                    <ul class="navbar-nav justify-content-end flex-grow-1 me-5 ">
+                                        <li class="nav-item mt-2">
+                                            <a class="nav-link active" aria-current="page" href="index.html">首頁</a>
+                                        </li>
+                                        <li class="nav-item mt-2">
+                                            <a class="nav-link" href="#">最新消息</a>
+                                        </li>
+                                        <li class="nav-item mt-2">
+                                            <a class="nav-link" href="product_webpage.html">最新產品</a>
+                                        </li>
+                                        <li class="nav-item mt-2">
+                                            <a class="nav-link" href="#">關於我們</a>
+                                        </li>
+                                        <li id="manager_function" class="nav-item dropdown d-none mt-2">
+                                            <a class="nav-link text-primary" href="#" role="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                管理員功能
+                                            </a>
+                                            <ul class="dropdown-menu text-center">
+                                                <li><a class="dropdown-item" href="member_control_panel.html">會員管理</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="product_C_panel.html">新增商品</a></li>
+                                                <li><a class="dropdown-item" href="product_control_panel.html">產品管理</a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">未來功能</a></li>
+                                            </ul>
+                                        </li>
+
+
+                                        <li class="nav-item dropdown ">
+                                            <a href="" class="nav-link" role="button" data-bs-toggle="dropdown">
+                                                <span class="me-3 d-none" id="navbar_username_showtext">
+                                                    <img src="#" id="navbar_memberPhoto"
+                                                        class="rounded rounded-circle bg-cover border border-4 border-white"
+                                                        style="width: 50px; height: 50px;">
+                                                    <span class="h5" id="navbar_username_text">XX</span>
+                                                </span>
+                                            </a>
+                                            <ul id="normal_member_function" class="dropdown-menu tetx-center">
+                                                <li class="dropdown-item text-center"><a
+                                                        href="member_info_panel.html">會員資料</a></li>
+                                                <li class="dropdown-item text-center">
+                                                    <a href="order_history.html">訂單查詢</a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li class="dropdown-item text-center">
+                                                    <button id="navbar_btn_logout" class="btn d-none" @click="logout">
+                                                        <i class="fa-solid fa-door-open fa-beat-fade fa-xl"></i>
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li id="navbar_btn_login" class="nav-item mt-2">
+                                            <a href="#logimModal" class="nav-link" data-bs-target="#loginModal"
+                                                data-bs-toggle="modal" role="button">
+                                                <i class="fa-solid fa-user fa-xl"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </nav>
+                </header>
+                <!-- Login Modal -->
+                <div class="modal modal-lg fade" id="loginModal" aria-hidden="true" aria-labelledby="loginModal"
+                    tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content bg-cover">
+                            <div class="row justify-content-center">
+                                <div class="col-6 w-50 modal_left_login text-white text-center">
+                                    <div class="align-content-center text-start p-4">
+                                        <h3 class="text-center mt-5">管理者登入</h3>
+                                        <label for="Modal-username-login" class="form-label"
+                                            aria-placeholder="使用者帳號">Username</label>
+                                        <input type="text" id="username_login" placeholder="使用者帳號" class="form-control"
+                                            v-model="loginForm.username" />
+                                        <label for="username-login-modal" class="form-label mt-2"
+                                            aria-placeholder="使用者帳號">Password</label>
+                                        <input type="password" id="password_login" placeholder="使用者密碼"
+                                            class="form-control" v-model="loginForm.password" />
+                                        <div class="form-check mt-3">
+                                            <input type="checkbox" id="Modal-keeplogin" class="form-check-input" />
+                                            <label class="form-check-label" for="Modal-keeplogin">保持登入</label>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center mt-2">
+                                        <button id="ok_btn_login" class="btn btn-lg border-1" @click="login">登入</button>
+                                        <div class="hr-container">
+                                            或
+                                        </div>
+                                        <div class="" width="200">
+                                            <a href="member_regist_webpage.html"
+                                                class="btn btn-lg btn-primary text-white border-1"
+                                                data-bs-target="#registerModal" data-bs-toggle="modal"
+                                                data-bs-dismiss="modal">註冊成為會員</a>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-6 w-50 modal_right_login bg-cover text-end">
+                                    <button type="button" class="btn-close btn-close-white me-3 mt-3"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Register Modal  -->
+            <div class="modal modal-lg fade" id="registerModal" aria-hidden="true" aria-labelledby="loginModal"
+                tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="row flex-column align-items-end modal-content modal_register ">
+                        <div class="col-1">
+                            <button type="button" class="btn-close me-3 mt-3 btn-close-white text-end"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="row p-3 justify-content-center">
+                            <!--  -->
+                            <div class="col-md-6">
+                                <!-- username -->
+                                <div class="mt-4">
+                                    <label for="" class="form-label text-white">會員帳號</label>
+                                    <input type="text" class="form-control" placeholder="8-15字，須含英文字母及數字"
+                                        v-model="username"
+                                        :class="{'is-valid' : flag_username, 'is-invalid' : !flag_username }">
+                                    <div class="valid-feedback">{{ username_validfeedback }}</div>
+                                    <div class="invalid-feedback">{{ username_invalidfeedback }}</div>
+                                </div>
+                                <!-- password -->
+                                <div class="mt-4">
+                                    <label for="" class="form-label text-white">會員密碼</label>
+                                    <input type="password" class="form-control" v-model="password"
+                                        placeholder="8-15字元，須含大小寫字母及數字"
+                                        :class="{'is-valid' : flag_password, 'is-invalid' : !flag_password }">
+                                    <div class="valid-feedback">密碼符合規定</div>
+                                    <div class="invalid-feedback">密碼不符合規定</div>
+                                </div>
+                                <!-- confirm passeord -->
+                                <div class="mt-4">
+                                    <label for="" class="form-label text-white">確認密碼</label>
+                                    <input type="password" class="form-control" v-model="re_password"
+                                        :class="{'is-valid' : flag_repassword, 'is-invalid' : !flag_repassword }">
+                                    <div class="valid-feedback">密碼相符</div>
+                                    <div class="invalid-feedback">密碼不相符</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- 個人照 -->
+                                <div class="mt-4 shadow shadow-lg">
+                                    <label for="" class="form-label text-white">請選擇上傳個人照:</label>
+                                    <input type="file" class="form-control" @change="handlePhotoUpload">
+                                    <div v-if="previewPhoto" class="mt-2 text-center">
+                                        <img :src="previewPhoto" class="rounded-circle"
+                                            style="width: 150px; height: 150px; object-fit: cover;" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 會員資料 -->
+                            <div class="hr-container">
+                                <h5 class="text-white text-center">會員資料</h5>
+                            </div>
+                            <div class="row">
+                                <!-- 姓名 -->
+                                <div class="col-md-3">
+                                    <input type="text" placeholder="大名" class="form-control" v-model="realname" />
+                                </div>
+                                <!-- 性別 -->
+                                <div class="col-md-3 pt-1">
+                                    <label for="" class="form-check-label text-white">男</label>
+                                    <input type="radio" class="form-check-input form-check-inline" value="男"
+                                        v-model="gender">
+                                    <label for="" class="form-check-label text-white">女</label>
+                                    <input type="radio" class="form-check-input form-check-inline" value="女"
+                                        v-model="gender">
+                                </div>
+                                <!-- 信箱 -->
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="email"
+                                        :class="{'is-valid' : flag_email, 'is-invalid' : !flag_email }">
+                                    <div class="valid-feedback">符合規定</div>
+                                    <div class="invalid-feedback">不符合規定</div>
+                                </div>
+                                <!-- 居住地 -->
+                                <label for="" id="city_reg_label" class="form-label text-white mt-2"
+                                    aria-placeholder="">居住地</label>
+                                <div class="col-md-6">
+                                    <select class="form-select my-2" v-model="city">
+                                        <option value="" disabled>請選擇縣市</option>
+                                        <option v-for="c in cityOptions" :key="c.CityName" :value="c.CityName">{{
+                                            c.CityName }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select my-2" v-model="district">
+                                        <option value="">請選擇行政區</option>
+                                        <option v-for="d in districtOptions" :key="d.AreaName" :value="d.AreaName">{{
+                                            d.AreaName }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">請填入居住地</div>
+                                </div>
+                            </div>
+                            <!-- 註冊按鈕 -->
+                            <button class="btn btn-lg border-1 mt-3" @click="register">註冊</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- section 輪播-->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div id="carousel"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最新消息 -->
+        <section class="mt-5">
+            <div class="mb-3 display-4 fw-900 text-center">熱銷產品</div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 h-100">
+                        <div class="bg-cover"
+                            style="overflow: hidden; background-image: url(img/web/s_banner02.jpg); height: 600px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6 h-100">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-6 bg-cover"
+                                style="height: 300px; background-image: url(img/web/bg-003.jpg);">
+                            </div>
+                            <div class="col-6 bg-cover "
+                                style="height: 300px; background-image: url(img/web/bg-005.jpg);">
+                            </div>
+                            <div class="col-12 bg-cover"
+                                style="height: 300px; background-image: url(img/web/s_banner01.jpg);">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 熱銷產品 -->
+        <section>
+            <div class="container pt-5 mt-5" style="height: 800px;">
+                <div class="mb-3 display-4 fw-900 text-center">熱銷產品</div>
+                <div class="row justify-content-center  mt-5">
+                    <div class="col-md-3 col-sm-4">
+                        <div class="bg-info rounded-4 text-center bg-cover myrollert wow animate__fadeInDown"
+                            data-wow-duration="3s" data-wow-delay="0s"
+                            style="width: 100%; height: 400px; background-image: url(img/web/product001.jpg); top: 100px; ">
+                            <div class="rollert d-flex flex-column">
+                                <button class="btn btn-info text-white">了解更多
+                                    <i class="fa-solid fa-arrow-right fa-beat fa-lg"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-4">
+                        <div class="bg-info rounded-4  bg-cover myrollert wow animate__fadeInDown"
+                            data-wow-duration="3s" data-wow-delay="0s"
+                            style="width: 100%; height: 400px; background-image: url(img/web/product002.jpg);">
+                            <div class="rollert d-flex flex-column">
+                                <button class="btn btn-info text-white">了解更多
+                                    <i class="fa-solid fa-arrow-right fa-beat fa-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-4">
+                        <div class="bg-info rounded-4  bg-cover myrollert wow animate__fadeInUp" data-wow-duration="3s"
+                            data-wow-delay="0s"
+                            style="width: 100%; height: 400px; background-image: url(img/web/product003.jpg); top: 125px;">
+                            <div class="rollert d-flex flex-column">
+                                <button class="btn btn-info text-white">了解更多
+                                    <i class="fa-solid fa-arrow-right fa-beat fa-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 優勢特色 -->
+        <section id="s07" class="vh-50 pb-5">
+            <div class="container-fluid" style="background-color: #333333;">
+                <div class="row p-5 justify-content-center ">
+                    <div id="box01"
+                        class="col-md-3 rounded-3 justify-content-center text-center ms-3 wow animate__backInUp"
+                        data-wow-duration="2s" data-wow-delay="0s" style="height: 250px; line-height: 125px;">
+                        <a href="#">
+                            <i class="fa-solid fa-building-user fa-2xl" style="color: #ffffff;"></i>
+                            <p class="text-white">關於我們</p>
+                        </a>
+                    </div>
+                    <div id="box02"
+                        class="col-md-3 rounded-3 justify-content-center text-center ms-3 wow animate__backInUp"
+                        data-wow-duration="2s" data-wow-delay="0s" style="height: 250px; line-height: 125px;">
+                        <a href="#">
+                            <i class="fa-regular fa-handshake fa-2xl" style="color: #ffffff;"></i>
+                            <p class="text-white">社會責任</p>
+                        </a>
+                    </div>
+
+                    <div id="box03"
+                        class="col-md-3 rounded-3 justify-content-center text-center ms-3 wow animate__backInUp"
+                        data-wow-duration="2s" data-wow-delay="0s" style="height: 250px; line-height: 125px;">
+                        <a href="#">
+                            <i class="fa-solid fa-screwdriver-wrench fa-xl " style="color: #ffffff;"></i>
+                            <p class="text-white">服務&支援</p>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- footer -->
+        <div id="footer"></div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- wow.js -->
+    <script src="js/wow.min.js"></script>
+    <!-- sweet alarm2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const App = {
+            data() {
+                return {
+                    // 註冊會員
+                    username: '',
+                    password: '',
+                    re_password: '',
+                    realname: '',
+                    gender: '',
+                    email: '',
+                    city: '',
+                    district: '',
+                    cityOptions: [],
+                    districtOptions: [],
+                    photoFile: null,
+                    previewPhoto: '',
+                    flag_username: false,
+                    flag_password: false,
+                    flag_repassword: false,
+                    flag_email: false,
+                    username_validfeedback: '',
+                    username_invalidfeedback: '',
+                    // 會員登入
+                    loginForm: {
+                        username: '',
+                        password: '',
+                    },
+
+                    member: null,
+                    isUsernameValid: true,
+                    isPasswordValid: true,
+                }
+            },
+            watch: {
+                city(newVal) {
+                    const selected = this.cityOptions.find(c => c.CityName === newVal);
+                    this.districtOptions = selected ? selected.AreaList : [];
+                    this.district = '';
+                },
+                username: function (newValue) {
+                    const vm = this;
+                    // console.log(newValue);
+                    // const rule = /[a-z]/; //要包含英文字母
+                    // const rule = /a/; //要包含英文字母a
+                    // const rule = /A/; //要包含英文字母A
+                    // const rule = /a./; //要包含英文字母a且不可以在最後
+
+                    // 1.至少8個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.少於15個字元
+                    const rules = /^[a-zA-Z0-9]{6,15}$/;
+
+                    // console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        var JSONdata = {};
+                        JSONdata["username"] = newValue;
+                        // console.log(JSON.stringify(JSONdata));
+
+                        // 傳遞至後端確認品名是否可以使用 (是否重複)
+                        $.ajax({
+                            type: "POST",
+                            url: "api/member_control_api_v1.php?action=checkuni",
+                            dataType: "json",
+                            data: JSON.stringify(JSONdata),
+                            success: function (data) {
+                                // console.log(data);
+                                if (data.state) {
+                                    vm.flag_username = true;
+                                    vm.username_validfeedback = data.message;
+                                } else {
+                                    vm.flag_username = false;
+                                    vm.username_invalidfeedback = data.message;
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "API介接錯誤!",
+                                    text: "member_login_control_v1.php?action=checkuni",
+                                    icon: "error"
+                                });
+                            }
+                        });
+
+                    } else {
+                        vm.flag_username = false;
+                        vm.username_invalidfeedback = '帳號不符合規定';
+                    }
+                },
+                password: function (newValue) {
+                    const vm = this;
+
+                    // 1.至少8-15個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.特殊符號
+                    vm.flag_repassword = false;
+                    const rules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,15}$/;
+
+                    // console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        vm.flag_password = true;
+                    } else {
+                        vm.flag_password = false;
+                    }
+                },
+                re_password: function (newValue) {
+                    const vm = this;
+                    if (vm.re_password == vm.password) {
+                        vm.flag_repassword = true;
+                    } else {
+                        vm.flag_repassword = false;
+                    }
+                },
+                email: function (newValue) {
+                    const vm = this;
+                    const rules = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+
+                    if (rules.test(newValue)) {
+                        vm.flag_email = true;
+                    } else {
+                        vm.flag_email = false;
+                    }
+                }
+            },
+            methods: {
+                handlePhotoUpload(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.photoFile = file;
+                        this.previewPhoto = URL.createObjectURL(file);
+                    }
+                },
+                async register() {
+                    const vm = this;
+                    if (vm.flag_username && vm.flag_password && vm.flag_repassword && vm.flag_email && vm.realname && vm.gender && vm.city && vm.district && vm.photoFile) {
+                        //傳遞至後端API執行註冊行為
+
+                        const formData = new FormData();
+                        formData.append('photo', this.photoFile);
+
+                        try {
+                            const uploadRes = await axios.post('api/member_photoupload_api_v1.php', formData);
+                            if (!uploadRes.data.state) {
+                                return Swal.fire('圖片上傳失敗', '', 'error');
+                            }
+
+                            const photoFilename = uploadRes.data.filename;
+                            // const payload = {
+                            //     username: this.username,
+                            //     password: this.password,
+                            //     email: this.email,
+                            //     name: this.realName,
+                            //     gender: this.gender,
+                            //     city: this.city,
+                            //     region: this.district,
+                            //     photo: photoFilename
+                            // };
+                            var JSONdata = {};
+                            JSONdata["username"] = vm.username;
+                            JSONdata["password"] = vm.password;
+                            JSONdata["photo"] = photoFilename;
+                            JSONdata["name"] = vm.realname;
+                            JSONdata["gender"] = vm.gender;
+                            JSONdata["email"] = vm.email;
+                            JSONdata["city"] = vm.city;
+                            JSONdata["region"] = vm.district;
+                            console.log(JSON.stringify(JSONdata));
+
+                            const registerRes = await axios.post('api/member_control_api_v1.php?action=register', JSON.stringify(JSONdata));
+                            const data = registerRes.data;
+                            // Swal.fire(data.message, '', data.state ? 'success' : 'error');
+                            if (data.state) {
+                                // 儲存登入資訊
+                                localStorage.setItem('member', JSON.stringify(data.data));
+                                vm.setCookie("UID01", data.data.UID01, 7);
+
+                                // UI 顯示登入狀態
+                                document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                $("#navbar_username_showtext").removeClass("d-none");
+                                $("#navbar_btn_login").addClass("d-none");
+                                $("#navbar_btn_logout").removeClass("d-none");
+
+                                if (data.data.Role === "M") {
+                                    $("#manager_function").removeClass("d-none");
+                                }
+                                $("#normal_member_function").removeClass("d-none");
+
+                                Swal.fire(data.message, '', 'success');
+                                bootstrap.Modal.getOrCreateInstance(document.getElementById('registerModal')).hide();
+                                // bootstrap.Modal.getOrCreateInstance(document.getElementById('loginModal')).show();
+                            }else{
+                                Swal.fire(data.message, '', 'error');
+                            }
+                        } catch (err) {
+                            Swal.fire('註冊流程發生錯誤', '', 'error');
+                        }
+                    }
+
+                },
+                validateLoginForm() {
+                    this.isUsernameValid = this.loginForm.username.length > 0;
+                    this.isPasswordValid = this.loginForm.password.length > 0;
+                    return this.isUsernameValid && this.isPasswordValid;
+                },
+                login() {
+                    if (!this.validateLoginForm()) {
+                        Swal.fire("請確認帳號與密碼是否填寫", '', 'warning');
+                        return;
+                    }
+
+                    axios.post('api/member_control_api_v1.php?action=login', this.loginForm)
+                        .then(res => {
+                            const data = res.data;
+                            if (data.state) {
+                                Swal.fire({
+                                    title: data.message,
+                                    text: `${data.data.RealName} 歡迎登入`,
+                                    icon: 'success'
+                                }).then(() => {
+                                    localStorage.setItem('member', JSON.stringify(data.data));
+                                    this.setCookie("UID01", data.data.UID01, 7);
+                                    $("#loginModal").modal("hide");
+                                    // 顯示會員資訊
+                                    document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                    document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                    $("#navbar_username_showtext").removeClass("d-none");
+                                    $("#navbar_btn_login").addClass("d-none");
+                                    $("#navbar_btn_logout").removeClass("d-none");
+
+                                    if (data.data.Role === "M") {
+                                        $("#manager_function").removeClass("d-none");
+                                    }
+                                    $("#normal_member_function").removeClass("d-none");
+                                });
+                            } else {
+                                Swal.fire(data.message, '', 'error');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire("登入失敗", "API 錯誤", "error");
+                        });
+                },
+                checkLogin() {
+                    const uid = this.getCookie("UID01");
+                    // 從localStorage取得登入資料
+                    const savedMember = localStorage.getItem('member');
+                    if (savedMember) {
+                        this.member = JSON.parse(savedMember);
+                    }
+                    if (!uid) return;
+
+                    axios.post('api/member_control_api_v1.php?action=checkuid', {
+                        uid01: uid
+                    })
+                        .then(res => {
+                            const data = res.data;
+                            if (data.state) {
+                                this.member = data.data;
+                                // 顯示會員資訊
+                                document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                $("#navbar_username_showtext").removeClass("d-none");
+                                $("#navbar_btn_login").addClass("d-none");
+                                $("#navbar_btn_logout").removeClass("d-none");
+
+                                if (data.data.Role === "M") {
+                                    $("#manager_function").removeClass("d-none");
+                                }
+                                $("#normal_member_function").removeClass("d-none");
+                            }
+                        });
+                },
+                logout() {
+                    Swal.fire({
+                        title: "確認是否要登出?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "確認",
+                        cancelButtonText: "取消"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 刪除 cookie
+                            this.setCookie("UID01", "", -1);
+                            this.member = null;
+                            Swal.fire("您已登出!", "", "success").then(() => {
+                                location.href = "index.html";
+                            });
+                        }
+                    });
+                },
+                setCookie(cname, cvalue, exdays) {
+                    const d = new Date();
+                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                    document.cookie = `${cname}=${cvalue};expires=${d.toUTCString()};path=/`;
+                },
+                getCookie(cname) {
+                    let name = cname + "=";
+                    let ca = document.cookie.split(';');
+                    for (let c of ca) {
+                        while (c.charAt(0) == ' ') c = c.substring(1);
+                        if (c.indexOf(name) == 0) return c.substring(name.length);
+                    }
+                    return "";
+                }
+            },
+            mounted() {
+                this.checkLogin();
+                axios.get('js/CityCountyData.json')
+                    .then(res => {
+                        this.cityOptions = res.data;
+                    })
+                    .catch(() => {
+                        Swal.fire('載入縣市資料失敗', '', 'error');
+                    });
+
+            }
+        }
+        Vue.createApp(App).mount('#app');
+    </script>
+
+</body>
+
+</html>

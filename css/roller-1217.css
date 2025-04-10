@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Noto+Serif+TC:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=IBM+Plex+Sans+JP&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+:root{
+    --mycolor01:#dec398;
+    --mycolor02:#1c3968;
+    --mycolor03:#374c6e;
+    --mycolor04:#536075;
+    --mycolor05:#6f747c;
+    --mycolor06:#8a8783;
+    --mycolor07:#a69b8a;
+    --mycolor08:#6b0b18;
+
+    --textcolor01:#ffffff;
+    --textcolor02:#000000;
+    /* roller color */
+    --rollercolor01:#fcdb1f4d;
+    --rollercolor02:#6f747cb3;
+    --backgroundcolor:#90909080;
+    --btncolor01:#9bc4fa;
+    --btncolor02:#044396;
+}
+/*  */
+.noto_tc{
+    font-family: "Noto Serif TC", serif;
+}
+/* 文字粗體 */
+.fw-100{
+    font-weight: 100;
+}
+.fw-200{
+    font-weight: 200;
+}
+.fw-300{
+    color: #044396;
+    font-weight: 300;
+}
+.fw-400{
+    font-weight: 400;
+}
+.fw-500{
+    font-weight: 500;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fw-700{
+    font-weight: 700;
+}
+.fw-800{
+    font-weight: 800;
+}
+.fw-900{
+    font-weight: 900;
+}
+/*  roller  */
+.roller_box {
+    position: relative;
+    overflow: hidden;
+}
+
+.roller_box .roller {
+    position: absolute;
+    background-color:var(--backgroundcolor);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(180deg, var(--rollercolor01), var(--rollercolor02));
+}
+
+.roller_box:hover .roller {
+    left: 0;
+    transition: left 2s;
+}
+
+.roller a {
+    display: block;
+    width: 150px;
+    height: 50px;
+    font-size: 24px;
+    text-align: center;
+    background-color: var(--btncolor01);
+    color: #2c2c2c;
+    line-height: 50px;
+    text-decoration: none;
+    border-radius: 25px;
+}
+
+.roller a:hover {
+    background-color:var(--btncolor02);
+    color: #ffffff;
+}

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員控制台</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main_style.css">
+    <link rel="stylesheet" href="css/roller.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <script type="module" src="js/app.js"></script>
+    <style>
+        .member-card {
+            width: 20rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- section navbar -->
+    <div id="header"></div>
+    <!-- table -->
+    <div class="container">
+        <h3 class="mt-5">會員資料管理</h3>
+        <div id="memberdata" class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="card .member-card" style="width: 18rem;">
+                    <img src="img/member/person01.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <p class="card-text">NAME</p>
+                        <p class="card-text">CREATETIME</p>
+                        <button id="update_btn" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#updateModal" data-id="${item.ID}" data-username="${item.Username}"
+                            data-password="${item.Password}" data-name="${item.RealName}" data-email="${item.Email}"
+                            data-gender="${item.Gender}" data-city="${item.City}" data-region="${item.Region}"
+                            data-role="${item.Role}" data-createtime="${item.Createtime}">更新</button>
+                        <button id="delete_btn" class="btn btn-danger" data-id="${item.ID}">刪除</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- updateModal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">會員資料更新</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <div class="col-6">
+                            <label for="" class="form-label">帳號</label>
+                            <input type="text" id="updateModal_username" name="updateModal_username"
+                                class="form-control" disabled>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">密碼</label>
+                            <input type="password" id="updateModal_password" name="updateModal_password"
+                                class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">信箱</label>
+                        <input type="text" id="updateModal_email" name="updateModal_email" class="form-control">
+                        <!-- <div class="valid-feedback">符合規定</div>
+                        <div class="invalid-feedback">不符合規定</div> -->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="" class="form-label">姓名</label>
+                            <input type="text" id="updateModal_name" name="updateModal_name" class="form-control">
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="updateModal_gender" class="form-check-input " name="gender"
+                                    value="男">
+                                <label for="" class="form-check-label">男</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="updateModal_gender" class="form-check-input " name="gender"
+                                    value="女">
+                                <label for="" class="form-check-label">女</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <div class="col-6">
+                            <label for="" class="form-label">居住地</label>
+                            <select name="" id="updateModal_city" class="form-select">
+                                <option value="">台中市</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="" class="form-label">行政區</label>
+                            <select name="" id="updateModal_region" class="form-select">
+                                <option value="" selected disabled>請先選取縣市</option>
+                            </select>
+                        </div>
+                        <div class="invalid-feedback">請填入居住地</div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="update_ok_btn" class="btn btn-primary">儲存</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <div id="footer"></div>
+
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // 縣市
+        var city;
+        var selectedCity;
+        var selectedRegion;
+        // 更新監聽
+        var uid;
+        var flag_update_email = true;
+        var flag_update_name = true;
+        // var flag_update_gender = true;
+
+        $(function () {
+            // 確認uid01是否存在
+            if (getCookie("UID01")) {
+                var JSONdata = {};
+                JSONdata["uid01"] = getCookie("UID01");
+
+                $.ajax({
+                    type: 'POST',
+                    url: "api/member_control_api_v1.php?action=checkuid",
+                    data: JSON.stringify(JSONdata),
+                    dataType: "json",
+                    success: showdata_checkuid,
+                    error: api_error
+                });
+            } else {
+                Swal.fire({
+                    title: "請登入會員",
+                    icon: "info",
+                });
+                location.href = "index.html"
+            }
+
+            // 載入縣市資料
+
+            $.ajax({
+                type: "GET",
+                url: "js/CityCountyData.json",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    city = data;
+                },
+                error: api_error
+            });
+
+            // 更新資料的即時監聽
+            // updateModal_email 的即時監聽
+            $("#updateModal_email").bind("input propertychange", function () {
+                if ($(this).val() !== "") {
+                    flag_email_update = true;
+                } else {
+                    flag_email_update = false;
+                }
+            });
+
+            // updateModal_name 的即時監聽
+            $("#updateModal_name").bind("input propertychange", function () {
+                if ($(this).val() !== "") {
+                    flag_email_update = true;
+                } else {
+                    flag_email_update = false;
+                }
+            });
+
+            // updateModal_gender 的即時監聽
+            // $("#updateModal_gender").change(function () {
+            //     console.log($(this).val());
+            //     if (!empty($(this).val())) {
+            //         flag_email_update = true;
+            //     } else {
+            //         flag_email_update = false;
+            //     }
+            // });
+
+            // 監聽縣市選單
+            $("#updateModal_city").change(function () {
+                $("#updataModal_region").empty();
+                selectedCity = $(this).val();
+                city.forEach(function (item) {
+                    if (item.CityName == selectedCity) {
+                        // 產生行政區選單
+                        $("#updateModal_region").empty();
+                        $("#updateModal_region").append('<option value="" selected disabled>--選擇行政區--</option>');
+                        // console.log(item);
+                        item.AreaList.forEach(function (myitem) {
+                            // console.log(myitem);
+                            var strHTML = `<option value="${myitem.AreaName}">${myitem.AreaName}</option>`;
+                            $("#updateModal_region").append(strHTML);
+                        });
+
+                    }
+                });
+            });
+
+            // 
+            
+
+            // 按鈕監聽
+            // 更新按鈕 #update_btn 監聽
+            $("#memberdata #update_btn").click(function () {
+                console.log($(this).data("id"));
+                selectedRegion = $(this).data("region");
+                selectedCity = $(this).data("city");
+                // 資料同步Modal
+                uid = $(this).data("id");
+                $("#updateModal_username").val($(this).data("username"));
+                $("#updateModal_password").val($(this).data("password"));
+                $("#updateModal_email").val($(this).data("email"));
+                $("#updateModal_name").val($(this).data("name"));
+                $("#updateModal_gender").val($(this).data("gender"));
+                // 顯示縣市選單
+                $("#updateModal_city").empty();
+                $("#updateModal_city").append('<option value="" selected disabled>--選取縣市--</option>');
+                city.forEach(function (item) {
+                    // console.log(item);
+                    var strHTML = `<option value="${item.CityName}">${item.CityName}</option>`;
+                    $("#updateModal_city").append(strHTML);
+                    $("#updateModal_city").val(selectedCity);
+                    if (item.CityName == selectedCity) {
+                        $("#updateModal_region").empty();
+                        $("#updateModal_region").append('<option value="" selected disabled>--選擇行政區--</option>');
+                        item.AreaList.forEach(function (region) {
+                            var strHTML2 = `<option value="${region.AreaName}">${region.AreaName}</option>`;
+                            $("#updateModal_region").append(strHTML2);
+                            $("#updateModal_region").val(selectedRegion);
+                        });
+
+                    }
+                });
+
+            });
+
+            // 更新確認按鈕 #update_ok_btn 監聽
+            $("#update_ok_btn").click(function () {
+                if (flag_update_email && flag_update_name) {
+                    console.log(uid);
+                    var JSONdata = {};
+                    JSONdata["id"] = uid;
+                    JSONdata["realname"] = $("#updateModal_name").val();
+                    // JSONdata["gender"] = $("#updateModal_gender").val();
+                    JSONdata["email"] = $("#updateModal_email").val();
+                    JSONdata["city"] = $("#updateModal_city").val();
+                    JSONdata["region"] = $("#updateModal_region").val();
+                    console.log(JSON.stringify(JSONdata));
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'api/member_control_api_v1.php?action=updatedata',
+                        data: JSON.stringify(JSONdata),
+                        dataType: 'json',
+                        success: showdata_update,
+                        error: api_error
+                    });
+                }
+            });
+
+
+        });
+
+
+
+        // 確認UID
+        function showdata_checkuid(data) {
+            if (data.state) {
+
+                // loginModal消失
+                $("#loginModal").modal("hide");
+
+                ///顯示頭像歡迎訊息
+                $("#navbar_username_showtext").removeClass("d-none");
+                $("#navbar_memberPhoto").attr("src", "img/member/" + data.data.Photo);
+                $("#navbar_username_text").text(data.data.RealName);
+
+                //隱藏註冊與登入按鈕
+                $("#navbar_btn_login").addClass("d-none");
+                $("#navbar_username_text").removeClass("d-none");
+
+                //顯示登出按鈕
+                $("#navbar_btn_logout").removeClass("d-none");
+
+                // 會員權限分級
+                if (data.data.Role === "M") {
+                    // 顯示控制台按鈕
+                    $("#manager_function").removeClass("d-none");
+                    $("#normal_member_function").removeClass("d-none");
+
+                    // 渲染會員資料
+                    $.ajax({
+                        type: "GET",
+                        url: "api/member_control_api_v1.php?action=getdata",
+                        dataType: "json",
+                        async: false,
+                        success: showdata_userdata,
+                        error: api_error
+                    });
+
+                } else if (data.data.Role == "N") {
+                    // 顯示會員功能
+                    $("#normal_member_function").removeClass("d-none");
+                    // 一般會員 導覽回首頁
+                    Swal.fire({
+                        title: "無權限訪問此頁面",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "回首頁"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "index.html";
+                        }
+                    });
+                }
+
+
+                // 更新按鈕 update_btn 監聽
+                $("#memberdata #update_btn").click(function () {
+                    console.log($(this).data("id"));
+                    selectedRegion = $(this).data("region");
+                    selectedCity = $(this).data("city");
+                    // 資料同步Modal
+                    uid = $(this).data("id");
+                    $("#updateModal_username").val($(this).data("username"));
+                    $("#updateModal_password").val($(this).data("password"));
+                    $("#updateModal_email").val($(this).data("email"));
+                    $("#updateModal_name").val($(this).data("name"));
+                    $("#updateModal_gender").val($(this).data("gender"));
+                    // 顯示縣市選單
+                    $("#updateModal_city").empty();
+                    $("#updateModal_city").append('<option value="" selected disabled>--選取縣市--</option>');
+                    city.forEach(function (item) {
+                        // console.log(item);
+                        var strHTML = `<option value="${item.CityName}">${item.CityName}</option>`;
+                        $("#updateModal_city").append(strHTML);
+                        $("#updateModal_city").val(selectedCity);
+                        if (item.CityName == selectedCity) {
+                            $("#updateModal_region").empty();
+                            $("#updateModal_region").append('<option value="" selected disabled>--選擇行政區--</option>');
+                            item.AreaList.forEach(function (region) {
+                                var strHTML2 = `<option value="${region.AreaName}">${region.AreaName}</option>`;
+                                $("#updateModal_region").append(strHTML2);
+                                $("#updateModal_region").val(selectedRegion);
+                            });
+
+                        }
+                    });
+
+                });
+
+                // 刪除按鈕 delete_btn監聽
+                $("#memberdata #delete_btn").click(function () {
+                    Swal.fire({
+                        title: "確認刪除使用者?",
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "確認",
+                        denyButtonText: `取消`,
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 傳遞至後端API執行
+                            var JSONdata = {};
+                            JSONdata["id"] = $(this).data("id");
+
+                            $.ajax({
+                                type: "DELETE",
+                                url: "api/member_control_api_v1.php?action=delete",
+                                data: JSON.stringify(JSONdata),
+                                dataType: "json",
+                                success: showdata_delete,
+                                error: api_error
+                            });
+                        }
+                    });
+                });
+
+                // 監聽 #navbar_btn_logout 按鈕
+                $("#navbar_btn_logout").click(function () {
+                    Swal.fire({
+                        title: "確認是否要登出?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "確認",
+                        cancelButtonText: "取消"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            setCookie("UID01", "", 7);
+                            Swal.fire({
+                                title: "您已登出!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            location.href = "index.html";
+                        }
+                    });
+                });
+
+            }
+        }
+
+        // 顯示會員資料
+        function showdata_userdata(data) {
+            // console.log(data);
+            $("#memberdata").empty();
+            if (data.state) {
+                data.data.forEach(function (item) {
+                    if (item.Role == "N") {
+                        item.Role = "一般會員";
+                    } else if (item.Role == "S") {
+                        item.Role = "賣家";
+                    } else {
+                        item.Role = "管理員";
+                    }
+                    var strHTML = `<div class="col-md-3 mt-3 myrollert">
+                                        <div class="card member-card h-100">
+                                            <img src="img/member/${item.Photo}" class="card-img-top" style="height:300px">
+                                            <div class="card-body">
+                                                <h5>使用者帳號:</h5><span class="card-text">${item.Username}</span>
+                                                <h5>註冊日期:</h5><span class="card-text">${item.Createtime}</span>
+                                                <div class="text-center">
+                                                    <button id="update_btn" class="btn btn-warning text-center" data-bs-toggle="modal"
+                                                    data-bs-target="#updateModal" data-id="${item.ID}" data-username="${item.Username}"
+                                                    data-password="${item.Password}" data-name="${item.RealName}" data-email="${item.Email}"
+                                                    data-gender="${item.Gender}" data-city="${item.City}" data-region="${item.Region}"
+                                                    data-role="${item.Role}" data-createtime="${item.Createtime}">更新</button>
+                                                <button id="delete_btn" class="btn btn-danger text-center" data-id="${item.ID}">刪除</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    $("#memberdata").append(strHTML);
+                });
+            }
+        }
+
+        // 會員資料更新
+        function showdata_update(data) {
+            console.log(data);
+            if (data.state) {
+                Swal.fire({
+                    title: "更新成功",
+                    text: "會員資料更新成功",
+                    icon: "success"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.href = "member_control_panel.html";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "更新錯誤",
+                    text: "請確認欄位或資料庫連線是否正確?",
+                    icon: "question"
+                });
+            }
+        }
+
+        // 刪除會員資料
+        function showdata_delete(data) {
+            // console.log(data);
+            if (data.state) {
+                Swal.fire({
+                    title: data.message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "確認",
+                    denyButtonText: `Don't save`,
+                    icon: "success",
+                    allowOutsideClick: false
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        location.href = "member_control_panel.html";
+                    }
+                })
+            } else {
+                Swal.fire({
+                    title: data.message,
+                    icon: "error"
+                });
+            }
+        }
+
+        // api介接錯誤
+        function api_error() {
+            Swal.fire({
+                title: "API介接錯誤!",
+                text: "member_control.api.v1.php",
+                icon: "error"
+            });
+        }
+
+        //from w3s
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+
+</html>

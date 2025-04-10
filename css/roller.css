@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Noto+Serif+TC:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=IBM+Plex+Sans+JP&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+:root{
+    --mycolor01:#dec398;
+    --mycolor02:#1c3968;
+    --mycolor03:#374c6e;
+    --mycolor04:#536075;
+    --mycolor05:#6f747c;
+    --mycolor06:#8a8783;
+    --mycolor07:#a69b8a;
+    --mycolor08:#6b0b18;
+
+    --textcolor01:#ffffff;
+    --textcolor02:#000000;
+    /* roller color */
+    --rollercolor01:#fcdb1f4d;
+    --rollercolor02:#6f747cb3;
+    --backgroundcolor:#90909080;
+    --btncolor01:#9bc4fa;
+    --btncolor02:#044396;
+}
+/*  */
+.noto_tc{
+    font-family: "Noto Serif TC", serif;
+}
+/* 文字粗體 */
+.fw-100{
+    font-weight: 100;
+}
+.fw-200{
+    font-weight: 200;
+}
+.fw-300{
+    color: #044396;
+    font-weight: 300;
+}
+.fw-400{
+    font-weight: 400;
+}
+.fw-500{
+    font-weight: 500;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fw-700{
+    font-weight: 700;
+}
+.fw-800{
+    font-weight: 800;
+}
+.fw-900{
+    font-weight: 900;
+}
+/*  roller  */
+.myrollerl{
+    position: relative;
+    overflow: hidden;
+}
+.myrollerl .rollerl{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(180deg, rgba(47, 189, 245, 0.1), rgba(248, 238, 97, 0.5));
+    top: 0;
+    left: -100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.myrollerl:hover .rollerl{
+    left: 0;
+    transition: left 1s;
+}
+
+/*上方滑入 外層: .myrollert 內層: .rollert   */
+.myrollert{
+    position: relative;
+    overflow: hidden;
+}
+.myrollert .rollert{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(180deg, rgba(47, 189, 245, 0.1), rgba(248, 238, 97, 0.5));
+    top: 0;
+    top: -100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.myrollert:hover .rollert{
+    top: 0;
+    transition: top 1s;
+}

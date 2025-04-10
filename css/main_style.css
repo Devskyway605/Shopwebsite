@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=IBM+Plex+Sans+JP&family=Kaisei+Decol&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+:root{
+    --mycolor01:#dec398;
+    --mycolor02:#1c3968;
+    --mycolor03:#374c6e;
+    --mycolor04:#536075;
+    --mycolor05:#6f747c;
+    --mycolor06:#8a8783;
+    --mycolor07:#a69b8a;
+    --mycolor08:#6b0b18;
+    --mycolor09:#11d197;
+
+    --textcolor01:#ffffff;
+    --textcolor02:#000000;
+    --textcolor03:#eeb10a;
+    /* roller color */
+    --rollercolor01:#fcdb1f4d;
+    --rollercolor02:#6f747cb3;
+    --backgroundcolor:#90909080;
+    --btncolor01:#9bc4fa;
+    --btncolor02:#044396;
+}
+/* 文字粗體 */
+.fw-100{
+    font-weight: 100;
+}
+.fw-200{
+    font-weight: 200;
+}
+.fw-300{
+    color: #044396;
+    font-weight: 300;
+}
+.fw-400{
+    font-weight: 400;
+}
+.fw-500{
+    font-weight: 500;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fw-700{
+    font-weight: 700;
+}
+.fw-800{
+    font-weight: 800;
+}
+.fw-900{
+    font-weight: 900;
+}
+
+.bg-01{
+    background-color: var(--mycolor01);
+    color: var(--mycolor02);
+}
+.bg-02{
+    background-color: var(--mycolor01);
+    color: var(--mycolor08);
+}
+.bg-03{
+    background-color: var(--mycolor04);
+    color: var(--textcolor03);
+}
+.bg-04{
+    background:var(--mycolor09);
+    color: var(--mycolor02)
+}
+.bg-05{
+    background:var(--rollercolor01);
+    color: var(--mycolor04)
+}
+.bg-06{
+    background-color: #1f2b37;
+    color: #77f2a1;
+}
+.bg-cover{
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+/* main css */
+body{
+    font-family: "Kaisei Decol", serif ;
+}
+a{
+    text-decoration: none;
+}
+.bg-color01{
+    background-color: var(--mycolor01);
+}
+.bg-color02{
+    background-color: var(--mycolor02);
+}
+.container{
+    font-family: "Kaisei Decol", serif;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.banner{
+    text-align: center;
+    background-image: url(/images/pic01.jpg);
+    background-position: center,center;
+    background-repeat: no-repeat;
+}
+.banner_content{
+    color: #ffffff;
+    position: relative;
+    text-align: center;
+    margin-top: 25%;
+    margin-left: 25%;
+    width: 500px;
+    height: 200px;
+    background-color: rgb(51, 48, 48,0.5);
+}
+/* login Modal */
+#registerModal {
+    border-radius: 20px;
+}
+
+#loginModal {
+    border-radius: 20px;
+}
+
+#reg_link a {
+    color: #fff;
+}
+
+#reg_link a:hover {
+    color: #f6b354;
+}
+
+.bg-modal {
+    background-color: #424769;
+}
+
+.modal_register {
+    background-color: #424769;
+    height: 800px;
+    border-start-start-radius: 20px;
+    border-end-start-radius: 20px;
+}
+
+.modal_right_register {
+    border-start-end-radius: 20px;
+    border-end-end-radius: 20px;
+}
+
+.modal_left_login {
+    background-color: #424769;
+    height: 600px;
+    border-start-start-radius: 20px;
+    border-end-start-radius: 20px;
+}
+
+.modal_right_login {
+    background-image: url(/img/web/loginmodal_background.jpg);
+    border-start-end-radius: 20px;
+    border-end-end-radius: 20px;
+}
+
+#ok_btn_reg {
+    background-color: #f6b354;
+    width: 150px;
+}
+
+#ok_btn_login {
+    background-color: #f6b354;
+    width: 150px;
+}
+/* login Modal - end  */
+#wordpress{
+    height: 80vh;
+}
+#wordpress .logo{
+    height: auto;
+}
+#wordpress img{
+    border-radius: 50%;
+}
+#work{
+    color: #292929;
+    background-color: #ffffff;
+}
+#work .logo img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+#link{
+    background-color: #004574;
+}
+#link .logo img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+table{
+    font-size: 18px;
+}
+.hr-container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.hr-container::before,
+.hr-container::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.hr-container::before {
+    margin-right: 10px;
+}
+
+.hr-container::after {
+    margin-left: 10px;
+}
+
+footer {
+    background-color: #49141d;
+    color: #fff;
+    padding: 10px;
+}
+
+@media screen and (max-width:768px){
+    .table thead{
+        display: none;
+    }
+    .table tbody tr{
+        border: 2px dotted var(--mycolor02);
+        display: block;
+        margin-bottom: 15px;
+    }
+    .table tbody tr td{
+        display: block;
+        overflow: hidden;
+
+    } 
+    .table tbody tr td::before{
+        content: attr(data-th) " : ";
+        font-weight: 500;
+        color: var(--mycolor02);
+        display: block;
+        float: left;
+        width: 30%;
+        text-align: right;
+        padding-right: 15px;
+    }
+    .table tbody tr td .table-col{
+        display: block;
+        width: 70%;
+        float: left;
+       
+    }
+}

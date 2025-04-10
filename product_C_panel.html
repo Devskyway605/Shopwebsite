@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產品新增</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main_style.css">
+    <!-- font Awesome -->
+    <link rel="stylesheet" href="css/all.min.css" />
+    <!-- Animate css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="container-fluid">
+            <!-- section navbar -->
+            <nav class="navbar navbar-light bg-light navbar-expand-lg bg-body-tertiary sticky-top">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="index.html">購物網頁</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                        aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">導覽列</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body container-fluid" id="offcanvasNavbar">
+                            <ul class="navbar-nav justify-content-end flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="index.html">首頁</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">最新消息</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="#">最新產品</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">關於我們</a>
+                                </li>
+                                <li id="member_function" class="nav-item dropdown ">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        功能
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="member_control_panel.html">會員管理</a></li>
+                                        <li><a class="dropdown-item" href="product_C_panel.html">新增商品</a></li>
+                                        <li><a class="dropdown-item" href="product_control_panel.html">產品管理</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">未來功能</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="me-3 d-none" id="navbar_username_showtext">
+                                        <img src="img/bg-001.jpg" id="navbar_memberPhoto"
+                                            class="rounded rounded-circle bg-cover border border-4 border-white"
+                                            style="width: 50px; height: 50px;">
+                                        <span class="h5" id="navbar_username_text">XX</span>
+                                    </span>
+                                    <button id="navbar_btn_logout" class="btn btn-danger d-none">登出</button>
+                                </li>
+                                <li id="navbar_btn_login" class="nav-item">
+                                    <a href="#logimModal" class="nav-link" data-bs-target="#loginModal"
+                                        data-bs-toggle="modal">
+                                        <i class="fa-solid fa-user fa-xl" style="color: #384152"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </nav>
+        </div>
+        <div class="container card mt-5 shadow shadow-lg">
+            <div class="row card-body">
+                <div class="col-md-6">
+                    <div class=" mt-3">
+                        <label for="" class="form-label">產品名稱</label>
+                        <input type="text" id="pname_add" class="form-control">
+                    </div>
+                    <div class="mt-3">
+                        <label for="" class="form-label">產品分類</label>
+                        <select name="" id="category_add" class="form-select form-select-lg">
+                            <option value="" selected disabled>---請選擇產品分類---</option>
+                            <option value="服飾">服飾</option>
+                            <option value="配件">配件</option>
+                            <option value="鞋子">鞋子</option>
+                            <option value="吊飾">吊飾</option>
+                        </select>
+                    </div>
+                    <div class="row row-cols-2 mt-3">
+                        <div class="col mt-2">
+                            <label for="" class="form-label">產品單價</label>
+                            <input type="number" id="price_add" class="form-control" step="10" min="1">
+                        </div>
+                        <div class="col mt-2">
+                            <label for="" class="form-label">庫存數量</label>
+                            <input type="number" id="stock_add" class="form-control" min="1" max="100">
+                        </div>
+                        <div class="col-12 mt-3 h-100">
+                            <label for="" class="form-label">產品描述</label>
+                            <input type="text" id="description_add" class="form-control" style="height:100px;"
+                                placeholder="(文字描述50字以內)">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">請注意文字長度要求</div>
+                        </div>
+                        <div class="form-check form-switch mt-3 ms-3">
+                            <input type="checkbox" role="switch" name="status" id="status_add" class="form-check-input" checked>
+                            <label for="status" id="" class="form-check-label text-success">上架中</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- 上傳圖檔 -->
+                <div class="col-md-6 h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <label for="" class="form-label">選擇上傳產品圖檔(jpg / png):</label>
+                            <input type="file" id="photoupload" class="form-control">
+                        </div>
+                        <!-- 圖檔預覽 -->
+                        <div id="preview_box" class="shadow p-5 rounded-4 mt-3 ">
+                            <img src="" alt="" id="previewImg" class="img-fluid w-100 mt-3 ">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button id="ok_btn" class="btn btn-primary">
+                        新增產品
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- <script src="js/author.js"></script> -->
+    <!-- wow.js -->
+    <script src="js/wow.min.js"></script>
+    <!-- sweet alarm2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var flag_pname = false;
+        var flag_category = false;
+        var flag_price = false;
+        var flag_stock = false;
+        var flag_photo = false;
+        var flag_description = false;
+        var photo_name;
+        var p_status = "true";
+
+        $(function () {
+            // 確認uid01是否存在
+            if (getCookie("UID01")) {
+                var JSONdata = {};
+                JSONdata["uid01"] = getCookie("UID01");
+
+                $.ajax({
+                    type: 'POST',
+                    url: "api/member_control_api_v1.php?action=checkuid",
+                    data: JSON.stringify(JSONdata),
+                    dataType: "json",
+                    success: showdata_checkuid,
+                    error: api_error
+                });
+            } else {
+                Swal.fire({
+                    title: "請登入會員",
+                    icon: "info",
+                });
+                location.href = "index.html"
+            }
+
+            // 新增產品即時監聽
+            // 產品名監聽
+            $("#pname_add").bind("input propertychange", function () {
+                if ($(this).val() !== "") {
+                    flag_pname = true;
+                } else {
+                    flag_pname = false;
+                }
+            });
+            // 分類監聽
+            $("#category_add").bind("input propertychange", function () {
+                if ($(this).val() != "") {
+                    flag_category = true;
+                } else {
+                    flag_category = false;
+                }
+            });
+            //價格監聽
+            $("#price_add").bind("input propertychange", function () {
+                if ($(this).val() > 0) {
+                    flag_price = true;
+                } else {
+                    flag_price = false;
+                }
+            });
+            //庫存監聽
+            $("#stock_add").bind("input propertychange", function () {
+                if ($(this).val() > 0) {
+                    flag_stock = true;
+                } else {
+                    flag_stock = false;
+                }
+            });
+            //描述監聽
+            $("#description_add").bind("input propertychange", function () {
+                if ($(this).val().length > 0 && $(this).val().length < 51) {
+                    flag_description = true;
+                } else {
+                    flag_description = false;
+                }
+            });
+            //圖檔上傳監聽
+            $("#photoupload").change(function () {
+                console.log(photoupload.files);
+                console.log(photoupload.files[0]);
+                if (photoupload.files[0].type == "image/jpeg" || photoupload.files[0].type == "image/png") {
+                    console.log(URL.createObjectURL(photoupload.files[0]));
+
+                    // 顯示圖片預覽
+                    $("#previewImg").removeClass("d-none");
+                    $("#previewImg").attr("src", URL.createObjectURL(photoupload.files[0]));
+                    $photo_name = photoupload.files[0].name;
+                    flag_photo = true;
+                } else {
+                    flag_photo = false;
+                    $("#previewImg").addClass("d-none");
+                    $("#previewImg").attr("src", "");
+                }
+            });
+            // 上架狀態監聽
+            $("#status_add").change(function () {
+                console.log($(this).is(':checked'));
+                if ($(this).is(':checked')) {
+                    $(this).next().text("上架中");
+                    $(this).next().addClass("text-success");
+                    $(this).next().removeClass("text-danger");
+                    p_status = "true";
+                } else {
+                    $(this).next().text("暫無上架");
+                    $(this).next().addClass("text-danger");
+                    $(this).next().removeClass("text-success");
+                    p_status = "false";
+                }
+            });
+
+            // 監聽 ok_btn 按鈕
+            $("#ok_btn").click(function () {
+                console.log(flag_pname);
+                console.log(flag_category);
+                console.log(flag_price);
+                console.log(flag_stock);
+                console.log(flag_description);
+                console.log(flag_photo);
+                console.log(p_status);
+
+                if (flag_pname && flag_category && flag_price && flag_stock && flag_description && flag_photo) {
+
+                    var JSONdata = {};
+                    JSONdata["pname"] = $("#pname_add").val();
+                    JSONdata["category"] = $("#category_add").val();
+                    JSONdata["price"] = $("#price_add").val();
+                    JSONdata["stock"] = $("#stock_add").val();
+                    JSONdata["description"] = $("#description_add").val();
+                    JSONdata["photo"] = $photo_name;
+                    JSONdata["status"] = p_status;
+
+                    // 圖片上傳
+                    // var file_data = $('#photo_add').prop(['files'][0]);
+                    // console.log(file_data);
+                    var formData = new FormData();
+                    formData.append("file", photoupload.files[0]);
+                    console.log(formData);
+                    $.ajax({
+                        type: "POST",
+                        url: "api/product_photoupload_api_v1.php",
+                        data: formData,
+                        dataType: "json",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.state);
+                        },
+                        error: api_error
+                    });
+                    // 資料上傳
+                    $.ajax({
+                        type: "POST",
+                        url: "api/product_control_api_v1.php?action=add",
+                        data: JSON.stringify(JSONdata),
+                        dataType: "json",
+                        success: showdata_add,
+                        error: api_error
+                    });
+
+                } else {
+
+                }
+            });
+
+        });
+
+
+
+        function showdata_checkuid(data) {
+            // console.log(data);
+            if (data.state) {
+                // loginModal消失
+                $("#loginModal").modal("hide");
+
+                //顯示頭像歡迎訊息
+                $("#navbar_username_showtext").removeClass("d-none");
+                $("#navbar_memberPhoto").attr("src", "img/member/" + data.data.Photo);
+                $("#navbar_username_text").text(data.data.RealName);
+
+                //隱藏註冊與登入按鈕
+                $("#navbar_btn_login").addClass("d-none");
+                $("#navbar_username_text").removeClass("d-none");
+
+                //顯示登出按鈕
+                $("#navbar_btn_logout").removeClass("d-none");
+
+                //顯示控制台按鈕
+                $("#member_function").removeClass("d-none");
+            }
+
+            // 監聽 #navbar_btn_logout 按鈕
+            $("#navbar_btn_logout").click(function () {
+                Swal.fire({
+                    title: "確認是否要登出?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "確認",
+                    cancelButtonText: "取消"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        setCookie("UID01", "", 7);
+                        Swal.fire({
+                            title: "您已登出!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        location.href = "index.html";
+                    }
+                });
+            });
+        }
+
+        function showdata_add(data) {
+            console.log(data);
+            if (data.state) {
+                Swal.fire({
+                    // sweet alert的icon設定參數
+                    icon: "success",
+                    title: data.message,
+                    showDenyButton: false,
+                    showCancelButton: false,
+                    confirmButtonText: "確認",
+                    denyButtonText: `Don't save`,
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.href = "product_C_panel.html";
+                    }
+                });
+            } else {
+                alert(data.message);
+            }
+        }
+
+
+
+        //API 介接錯誤 
+        function api_error() {
+            Swal.fire({
+                title: "API介接錯誤!",
+                text: "member_control.api.v1.php",
+                icon: "error"
+            });
+        }
+
+        //from w3s
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+    </script>
+</body>
+
+</html>

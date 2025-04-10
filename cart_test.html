@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Shopping Cart</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .product, .cart-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+    .cart { margin-top: 20px; }
+    .order-summary { margin-top: 20px; border-top: 2px solid black; padding-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>🛍️ 商品列表</h1>
+  <div id="product-list">
+    <!-- 商品會由 JS 產生 -->
+  </div>
+
+  <h2>🛒 購物車</h2>
+  <div id="cart">
+    購物車是空的
+  </div>
+
+  <button onclick="submitOrder()">提交訂單</button>
+
+  <div id="order-summary"></div>
+
+  <script>
+    // 商品資料
+    const products = [
+      { id: 1, name: '蘋果', price: 30 },
+      { id: 2, name: '香蕉', price: 20 },
+      { id: 3, name: '橘子', price: 25 },
+    ];
+
+    let cart = [];
+
+    // 顯示商品
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        productDiv.innerHTML = `
+          <strong>${product.name}</strong> - $${product.price}
+          <button onclick="addToCart(${product.id})">加入購物車</button>
+        `;
+        productList.appendChild(productDiv);
+      });
+    }
+
+    // 加入購物車
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const cartItem = cart.find(item => item.id === productId);
+      if (cartItem) {
+        cartItem.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      renderCart();
+    }
+
+    // 顯示購物車
+    function renderCart() {
+      const cartDiv = document.getElementById('cart');
+      if (cart.length === 0) {
+        cartDiv.innerHTML = '購物車是空的';
+        return;
+      }
+      cartDiv.innerHTML = '';
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.innerHTML = `
+          ${item.name} - $${item.price} x 
+          <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)" />
+          <button onclick="removeFromCart(${item.id})">刪除</button>
+        `;
+        cartDiv.appendChild(itemDiv);
+      });
+
+      // 總價
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const totalDiv = document.createElement('div');
+      totalDiv.innerHTML = `<strong>總價：$${total}</strong>`;
+      cartDiv.appendChild(totalDiv);
+    }
+
+    // 更新數量
+    function updateQuantity(productId, quantity) {
+      const cartItem = cart.find(item => item.id === productId);
+      if (cartItem) {
+        cartItem.quantity = parseInt(quantity);
+        renderCart();
+      }
+    }
+
+    // 移除商品
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      renderCart();
+    }
+
+    // 提交訂單
+    function submitOrder() {
+      if (cart.length === 0) {
+        alert('購物車是空的，請加入商品');
+        return;
+      }
+      let summary = `<h3>📦 訂單內容：</h3>`;
+      cart.forEach(item => {
+        summary += `${item.name} x ${item.quantity} = $${item.price * item.quantity}<br>`;
+      });
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      summary += `<strong>總金額：$${total}</strong>`;
+      document.getElementById('order-summary').innerHTML = `<div class="order-summary">${summary}</div>`;
+      cart = []; // 清空購物車
+      renderCart();
+    }
+
+    // 初始渲染
+    renderProducts();
+    renderCart();
+  </script>
+
+</body>
+</html>

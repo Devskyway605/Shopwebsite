@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main_style.css">
+    <script type="module" src="js/app.js"></script>
+</head>
+
+<body>
+    <!-- navbar -->
+    <div id="header"></div>
+    <!--  -->
+    <div id="app" class="mt-5">
+        <div class="container p-5">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="card shadow-lg" style="height: 800px;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- username -->
+                                    <div class="mt-4">
+                                        <label for="Modal-username-login" id="username_reg_label"
+                                            class="form-label text-white" aria-placeholder="使用者帳號">使用者帳號</label>
+                                        <input type="text" id="username_reg" class="form-control" placeholder="帳號6-12字"
+                                            v-model="username" />
+                                        <div id="regModal_username_invalidfeedback" class="invalid-feedback">請確認帳號是否符合規定
+                                        </div>
+                                        <div id="regModal_username_validfeedback" class="valid-feedback">可使用的帳號</div>
+                                    </div>
+                                    <!-- password -->
+                                    <div class="mt-4">
+                                        <label for="" class="form-label text-white">會員密碼</label>
+                                        <input type="password" class="form-control" v-model="password"
+                                            placeholder="至少8-15字元，須含大小寫字母及數字與特殊符號"
+                                            :class="{'is-valid' : flag_password, 'is-invalid' : !flag_password }">
+                                        <div class="valid-feedback">密碼符合規定</div>
+                                        <div class="invalid-feedback">密碼不符合規定</div>
+                                    </div>
+                                    <!-- confirm passeord -->
+                                    <div class="mt-4">
+                                        <label for="" class="form-label text-white">確認密碼</label>
+                                        <input type="password" class="form-control" v-model="re_password"
+                                            :class="{'is-valid' : flag_repassword, 'is-invalid' : !flag_repassword }">
+                                        <div class="valid-feedback">密碼相符</div>
+                                        <div class="invalid-feedback">密碼不相符</div>
+                                    </div>
+                                </div>
+                                <!-- 個人照 -->
+                                <div class="col-md-6">
+                                    <div class="mt-4 shadow shadow-lg">
+                                        <label for="" class="form-label text-white">請選擇上傳個人照:</label>
+                                        <input type="file" class="form-control" @change="handlePhotoUpload">
+                                        <div v-if="previewPhoto" class="mt-2 text-center">
+                                            <img :src="previewPhoto" class="rounded-circle"
+                                                style="width: 150px; height: 150px; object-fit: cover;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 會員資料 -->
+                            <div class="hr-container">
+                                <h5 class="text-white text-center">會員資料</h5>
+                            </div>
+                            <div class="row">
+                                <!-- 姓名 -->
+                                <div class="col-md-3">
+                                    <input type="text" placeholder="大名" class="form-control" v-model="realname" />
+                                </div>
+                                <!-- 性別 -->
+                                <div class="col-md-3 pt-1">
+                                    <label for="" class="form-check-label text-white">男</label>
+                                    <input type="radio" class="form-check-input form-check-inline" value="男"
+                                        v-model="gender">
+                                    <label for="" class="form-check-label text-white">女</label>
+                                    <input type="radio" class="form-check-input form-check-inline" value="女"
+                                        v-model="gender">
+                                </div>
+                                <!-- 信箱 -->
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" v-model="email"
+                                        :class="{'is-valid' : flag_email, 'is-invalid' : !flag_email }">
+                                    <div class="valid-feedback">符合規定</div>
+                                    <div class="invalid-feedback">不符合規定</div>
+                                </div>
+                                <!-- 居住地 -->
+                                <label for="" id="city_reg_label" class="form-label text-white mt-2"
+                                    aria-placeholder="">居住地</label>
+                                <div class="col-md-6">
+                                    <select class="form-select my-2" v-model="city">
+                                        <option value="" disabled>請選擇縣市</option>
+                                        <option v-for="c in cityOptions" :key="c.CityName" :value="c.CityName">{{
+                                            c.CityName }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select my-2" v-model="district">
+                                        <option value="">請選擇行政區</option>
+                                        <option v-for="d in districtOptions" :key="d.AreaName" :value="d.AreaName">{{
+                                            d.AreaName }}</option>
+                                    </select>
+                                    <div class="invalid-feedback">請填入居住地</div>
+                                </div>
+                            </div>
+                            <!-- 註冊按鈕 -->
+                            <button class="btn btn-lg border-1 mt-3" @click="register">註冊</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- axios  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script>
+        const App = {
+            data() {
+                return {
+                    // 註冊會員
+                    username: '',
+                    password: '',
+                    re_password: '',
+                    realname: '',
+                    gender: '',
+                    email: '',
+                    city: '',
+                    district: '',
+                    cityOptions: [],
+                    districtOptions: [],
+                    photoFile: null,
+                    previewPhoto: '',
+                    flag_username: false,
+                    flag_password: false,
+                    flag_repassword: false,
+                    flag_email: false,
+                    username_validfeedback: '',
+                    username_invalidfeedback: '',
+                    // 會員登入
+                    loginForm: {
+                        username: '',
+                        password: '',
+                    },
+
+                    member: null,
+                    isUsernameValid: true,
+                    isPasswordValid: true,
+                }
+            },
+            watch: {
+                city(newVal) {
+                    const selected = this.cityOptions.find(c => c.CityName === newVal);
+                    this.districtOptions = selected ? selected.AreaList : [];
+                    this.district = '';
+                },
+                username: function (newValue) {
+                    const vm = this;
+                    // console.log(newValue);
+                    // const rule = /[a-z]/; //要包含英文字母
+                    // const rule = /a/; //要包含英文字母a
+                    // const rule = /A/; //要包含英文字母A
+                    // const rule = /a./; //要包含英文字母a且不可以在最後
+
+                    // 1.至少8個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.少於15個字元
+                    const rules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,15}$/;
+
+                    console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        var JSONdata = {};
+                        JSONdata["username"] = newValue;
+                        console.log(JSON.stringify(JSONdata));
+
+                        // 傳遞至後端確認品名是否可以使用 (是否重複)
+                        $.ajax({
+                            type: "POST",
+                            url: "api/member_control_api_v1.php?action=checkuni",
+                            dataType: "json",
+                            data: JSON.stringify(JSONdata),
+                            success: function (data) {
+                                console.log(data);
+                                if (data.state) {
+                                    vm.flag_username = true;
+                                    vm.username_validfeedback = data.message;
+                                } else {
+                                    vm.flag_username = false;
+                                    vm.username_invalidfeedback = data.message;
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "API介接錯誤!",
+                                    text: "member_login_control_v1.php?action=checkuni",
+                                    icon: "error"
+                                });
+                            }
+                        });
+
+                    } else {
+                        vm.flag_username = false;
+                        vm.username_invalidfeedback = '帳號不符合規定';
+                    }
+                },
+                password: function (newValue) {
+                    const vm = this;
+
+                    // 1.至少8-15個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.特殊符號
+                    vm.flag_repassword = false;
+                    const rules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/;
+
+                    console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        vm.flag_password = true;
+                    } else {
+                        vm.flag_password = false;
+                    }
+                },
+                re_password: function (newValue) {
+                    const vm = this;
+                    if (vm.re_password == vm.password) {
+                        vm.flag_repassword = true;
+                    } else {
+                        vm.flag_repassword = false;
+                    }
+                },
+                email: function (newValue) {
+                    const vm = this;
+                    const rules = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+
+                    if (rules.test(newValue)) {
+                        vm.flag_email = true;
+                    } else {
+                        vm.flag_email = false;
+                    }
+                }
+            },
+            created() {
+                const vm = this;
+                // 確認UID01
+                if (vm.getCookie("UID01")) {
+                    var JSONdata = {};
+                    JSONdata["uid01"] = vm.getCookie("UID01");
+                    // console.log(JSON.stringify(JSONdata));
+                    $.ajax({
+                        type: 'POST',
+                        url: 'api/member_control_api_v1.php?action=checkuid',
+                        data: JSON.stringify(JSONdata),
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            if (data.state) {
+                                // 驗證登入成功
+                                vm.loginUser = data.data;
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "API介接錯誤?",
+                                text: "member_checkuid_api_v1.php",
+                                icon: "error"
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: '未登入,將跳轉至登入畫面',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: "確認",
+                        denyButtonText: `Don't save`
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            location.href = "Vue_20250313_member_login.html";
+                        }
+                    });
+                }
+            },
+            methods: {
+                register() {
+                    const vm = this;
+                    if (vm.flag_username && vm.flag_password && vm.flag_repassword && vm.flag_email) {
+                        //傳遞至後端API執行註冊行為
+                        //input: {"username" : "owner04", "password" : "123456", "email" : "owner01@test.com"}
+
+                        var JOSNdata = {};
+                        JOSNdata["username"] = vm.username;
+                        JOSNdata["password"] = vm.password;
+                        JOSNdata["email"] = vm.email;
+                        console.log(JSON.stringify(JOSNdata));
+
+                        $.ajax({
+                            type: "POST",
+                            url: "api/member_control_api_v1.php?action=register",
+                            data: JSON.stringify(JOSNdata),
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                if (data.state) {
+                                    Swal.fire({
+                                        title: data.message,
+                                        icon: "success",
+                                        showCancelButton: false,
+                                        confirmButtonColor: "#3085d6",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "確認"
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            location.href = 'Vue_20250313_member_login.html';
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: data.message,
+                                        icon: "error",
+                                        showCancelButton: false,
+                                        confirmButtonColor: "#3085d6",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "確認"
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            return;
+                                        }
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "API介接錯誤?",
+                                    text: "member_control_api_v1.php?action=register",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "欄位有錯誤, 請修正?",
+                            icon: "warning",
+                            showCancelButton: false,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "確認"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                return;
+                            }
+                        });
+                    }
+                },
+                onPhotoSelected(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.photo = file;
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            document.getElementById('previewImg_reg').src = e.target.result;
+                            document.getElementById('previewImg_reg').classList.remove('d-none');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                },
+                getCookie(cname) {
+                    let name = cname + "=";
+                    let ca = document.cookie.split(';');
+                    for (let i = 0; i < ca.length; i++) {
+                        let c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1);
+                        }
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length, c.length);
+                        }
+                    }
+                    return "";
+                },
+            }
+
+        }
+        Vue.createApp(App).mount('#app');
+    </script>
+</body>
+
+</html>

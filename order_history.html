@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>訂單查詢</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <div id="orderApp" class="container mt-5">
+    
+    <h2 class="mb-4">訂單查詢</h2>
+    <div v-if="orders.length === 0">您目前沒有任何訂單。</div>
+    
+    <div v-for="order in orders" class="card mb-3 shadow">
+      <div class="card-header bg-light">
+        <strong>訂單編號：</strong>{{ order.order_id }}　
+        <strong>時間：</strong>{{ order.order_time }}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" v-for="item in order.items">
+          {{ item.name }} × {{ item.quantity }} 件 - NT ${{ item.price }}
+        </li>
+      </ul>
+      <div class="card-footer text-end fw-bold">
+        總金額：NT ${{ order.total }}
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+  <script>
+    const OrderApp = {
+      data() {
+        return {
+          orders: []
+        }
+      },
+      created() {
+        const member = JSON.parse(localStorage.getItem('member') || 'null');
+        if (!member) return;
+
+        axios.get(`api/order_history_api.php?member_id=${member.ID}`)
+          .then(res => {
+            this.orders = res.data.map(order => {
+              // 計算每張訂單總金額
+              order.total = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+              return order;
+            });
+          });
+      }
+    }
+    Vue.createApp(OrderApp).mount('#orderApp');
+  </script>
+</body>
+</html>

@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main_style.css">
+    <!-- font Awesome -->
+    <link rel="stylesheet" href="css/all.min.css" />
+    <!-- <script type="module" src="js/app.js"></script> -->
+    <script type="module" src="js/depart.js"></script>
+
+</head>
+<style>
+    /*  */
+    #registerModal {
+        border-radius: 20px;
+    }
+
+    #loginModal {
+        border-radius: 20px;
+    }
+
+    #reg_link a {
+        color: #fff;
+    }
+
+    #reg_link a:hover {
+        color: #f6b354;
+    }
+
+    .bg-modal {
+        background-color: #424769;
+    }
+
+    .modal_register {
+        background-color: #424769;
+        height: 800px;
+        border-start-start-radius: 20px;
+        border-end-start-radius: 20px;
+    }
+
+    .modal_right_register {
+        border-start-end-radius: 20px;
+        border-end-end-radius: 20px;
+    }
+
+    .modal_left_login {
+        background-color: #424769;
+        height: 600px;
+        border-start-start-radius: 20px;
+        border-end-start-radius: 20px;
+    }
+
+    .modal_right_login {
+        background-image: url(img/web/loginmodal_background.jpg);
+        border-start-end-radius: 20px;
+        border-end-end-radius: 20px;
+    }
+
+    #ok_btn_reg {
+        background-color: #f6b354;
+        width: 150px;
+    }
+
+    #ok_btn_login {
+        background-color: #f6b354;
+        width: 150px;
+    }
+
+    /*  */
+    .btn-cart {
+        position: relative;
+        background-color: transparent;
+    }
+
+    .btn-cart:hover {
+        cursor: pointer;
+    }
+
+    .btn-cart .badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .dropdown-menu-right {
+        right: 0;
+        left: auto;
+    }
+
+    /* 購物車 */
+    .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.3);
+        /* 背景遮罩 */
+        z-index: 1055;
+        display: flex;
+        justify-content: flex-end;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .cart-sidebar.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .cart-content {
+        width: 30vw;
+        /* 👉 這裡調整寬度 */
+        max-width: 100%;
+        background-color: #fff;
+        height: 100%;
+        transform: translateX(100%);
+        transition: transform 0.4s ease-in-out;
+        box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cart-content .cart-body {
+        flex-grow: 1;
+        overflow-y: auto;
+        min-height: 0;
+    }
+
+    .cart-sidebar.active .cart-content {
+        transform: translateX(0);
+    }
+
+    /* 購物車 垃圾桶 hover 動畫效果 */
+    .cart-trash-icon {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    .cart-trash-icon:hover {
+        transform: scale(1.2) rotate(-15deg);
+    }
+
+    /* 刪除動畫（淡出+往左） */
+    .removing {
+        animation: fadeOutLeft 0.4s forwards;
+    }
+
+    @keyframes fadeOutLeft {
+        0% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+    }
+</style>
+
+<body>
+    <div id="web">
+        <!-- navbar -->
+        <section>
+            <header>
+                <nav class="navbar navbar-light bg-light navbar-expand-lg bg-body-tertiary fixed-top">
+                    <div class="container-fluid">
+                        <a class="navbar-brand ms-4" href="index.html">
+                            <img src="img/web/logo_sm.png" alt="">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                            aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">導覽列</h5>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body container-fluid justify-content-center" id="offcanvasNavbar">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 me-5 ">
+                                    <li class="nav-item mt-2">
+                                        <a class="nav-link active" aria-current="page" href="index.html">首頁</a>
+                                    </li>
+                                    <li class="nav-item mt-2">
+                                        <a class="nav-link" href="#">最新消息</a>
+                                    </li>
+                                    <li class="nav-item mt-2">
+                                        <a class="nav-link" href="product_webpage.html">最新產品</a>
+                                    </li>
+                                    <li class="nav-item mt-2">
+                                        <a class="nav-link" href="#">關於我們</a>
+                                    </li>
+                                    <li id="manager_function" class="nav-item dropdown d-none mt-2">
+                                        <a class="nav-link text-primary" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            管理員功能
+                                        </a>
+                                        <ul class="dropdown-menu text-center">
+                                            <li><a class="dropdown-item" href="member_control_panel.html">會員管理</a></li>
+                                            <li><a class="dropdown-item" href="product_C_panel.html">新增商品</a></li>
+                                            <li><a class="dropdown-item" href="product_control_panel.html">產品管理</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">未來功能</a></li>
+                                        </ul>
+                                    </li>
+
+
+                                    <li class="nav-item dropdown ">
+                                        <a href="" class="nav-link" role="button" data-bs-toggle="dropdown">
+                                            <span class="me-3 d-none" id="navbar_username_showtext">
+                                                <img src="#" id="navbar_memberPhoto"
+                                                    class="rounded rounded-circle bg-cover border border-4 border-white"
+                                                    style="width: 50px; height: 50px;">
+                                                <span class="h5" id="navbar_username_text">XX</span>
+                                            </span>
+                                        </a>
+                                        <ul id="normal_member_function" class="dropdown-menu tetx-center">
+                                            <li class="dropdown-item text-center"><a
+                                                    href="member_info_panel.html">會員資料</a></li>
+                                            <li class="dropdown-item text-center">
+                                                <a href="order_history.html">訂單查詢</a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li class="dropdown-item text-center">
+                                                <button id="navbar_btn_logout" class="btn d-none" @click="logout">
+                                                    <i class="fa-solid fa-door-open fa-beat-fade fa-xl"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li id="navbar_btn_login" class="nav-item mt-2">
+                                        <a href="#logimModal" class="nav-link" data-bs-target="#loginModal"
+                                            data-bs-toggle="modal" role="button">
+                                            <i class="fa-solid fa-user fa-xl"></i>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item mt-2">
+                                        <!-- 購物車icon -->
+                                        <button class="btn btn-cart" @click="toggleCartSidebar(true)">
+                                            <i class="fa-solid fa-cart-shopping fa-xl"></i>
+                                            <span class="badge badge-pill text-bg-danger">{{ cartTotalQty }}</span>
+                                        </button>
+                                        <!-- 購物車 -->
+                                        <div :class="['cart-sidebar', { 'active': showCartSidebar }]"
+                                            @click.self="toggleCartSidebar(false)">
+                                            <div class="cart-content bg-white shadow-lg d-flex flex-column">
+                                                <!-- 標題列 -->
+                                                <div
+                                                    class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                                                    <h5 class="mb-0">🛒 購物車</h5>
+                                                    <button class="btn btn-sm btn-outline-secondary border-0"
+                                                        @click="toggleCartSidebar(false)">✖</button>
+                                                </div>
+
+                                                <!-- 可滾動的商品清單區 -->
+                                                <div class="cart-body flex-grow-1 overflow-auto p-3">
+                                                    <table class="table align-middle">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="col-3">商品名稱</th>
+                                                                <th class="col-3">數量</th>
+                                                                <th class="col-3">小計</th>
+                                                                <th class="col-1"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="(item, index) in cart" :key="item.Product_id"
+                                                                :class="{'removing': removingIndex === index}"
+                                                                class="align-middle">
+                                                                <td>
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <img :src="'img/product/' + item.Photo"
+                                                                            alt="商品圖片" class="rounded border"
+                                                                            style="width: 60px; height: 60px; object-fit: cover;">
+                                                                        <div>{{ item.Name }}</div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group input-group-sm">
+                                                                        <button class="btn btn-outline-secondary"
+                                                                            @click.stop="decreaseCartQty(index)">－</button>
+                                                                        <input type="number"
+                                                                            class="form-control text-center"
+                                                                            v-model.number="item.quantity" @click.stop
+                                                                            @blur="correctCartQty(index)" />
+                                                                        <button class="btn btn-outline-secondary"
+                                                                            @click.stop="increaseCartQty(index)">＋</button>
+                                                                    </div>
+                                                                </td>
+                                                                <td>NT${{ item.quantity * item.Price }}</td>
+                                                                <td>
+                                                                    <a href="#" @click.prevent="removeFromCart(index)">
+                                                                        <i
+                                                                            class="fas fa-trash-alt text-secondary cart-trash-icon"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <!-- 底部固定區塊 -->
+                                                <div class="p-3 border-top">
+                                                    <div class="text-end fw-bold mb-2">總計：NT${{ cartTotal }}</div>
+                                                    <button class="btn btn-primary w-100" @click="checkout">結帳</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </nav>
+            </header>
+        </section>
+        <!-- Login -->
+        <div class="modal modal-lg fade" id="loginModal" aria-hidden="true" aria-labelledby="loginModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-cover">
+                    <div class="row justify-content-center">
+                        <div class="col-6 w-50 modal_left_login text-white text-center">
+                            <div class="align-content-center text-start p-4">
+                                <h3 class="text-center mt-5">管理者登入</h3>
+                                <label for="Modal-username-login" class="form-label"
+                                    aria-placeholder="使用者帳號">Username</label>
+                                <input type="text" id="username_login" placeholder="使用者帳號" class="form-control"
+                                    v-model="loginForm.username" />
+                                <label for="username-login-modal" class="form-label mt-2"
+                                    aria-placeholder="使用者帳號">Password</label>
+                                <input type="password" id="password_login" placeholder="使用者密碼" class="form-control"
+                                    v-model="loginForm.password" />
+                                <div class="form-check mt-3">
+                                    <input type="checkbox" id="Modal-keeplogin" class="form-check-input" />
+                                    <label class="form-check-label" for="Modal-keeplogin">保持登入</label>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mt-2">
+                                <button id="ok_btn_login" class="btn btn-lg border-1" @click="login">登入</button>
+                                <div class="hr-container">
+                                    或
+                                </div>
+                                <div class="" width="200">
+                                    <a href="#registerModal" class="btn btn-lg btn-primary text-white border-1"
+                                        data-bs-target="#registerModal" data-bs-toggle="modal"
+                                        data-bs-dismiss="modal">註冊成為會員</a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-6 w-50 modal_right_login bg-cover text-end">
+                            <button type="button" class="btn-close btn-close-white me-3 mt-3" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Register -->
+        <div class="modal modal-lg fade" id="registerModal" aria-hidden="true" aria-labelledby="loginModal"
+            tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="row flex-column align-items-end modal-content modal_register ">
+                    <div class="col-1">
+                        <button type="button" class="btn-close me-3 mt-3 btn-close-white text-end"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="row p-3 justify-content-center">
+                        <!--  -->
+                        <div class="col-md-6">
+                            <!-- username -->
+                            <div class="mt-4">
+                                <label for="" class="form-label text-white">會員帳號</label>
+                                <input type="text" class="form-control" placeholder="8-15字，須含英文字母及數字" v-model="username"
+                                    :class="{'is-valid' : flag_username, 'is-invalid' : !flag_username }">
+                                <div class="valid-feedback">{{ username_validfeedback }}</div>
+                                <div class="invalid-feedback">{{ username_invalidfeedback }}</div>
+                            </div>
+                            <!-- password -->
+                            <div class="mt-4">
+                                <label for="" class="form-label text-white">會員密碼</label>
+                                <input type="password" class="form-control" v-model="password"
+                                    placeholder="8-15字元，須含大小寫字母及數字"
+                                    :class="{'is-valid' : flag_password, 'is-invalid' : !flag_password }">
+                                <div class="valid-feedback">密碼符合規定</div>
+                                <div class="invalid-feedback">密碼不符合規定</div>
+                            </div>
+                            <!-- confirm passeord -->
+                            <div class="mt-4">
+                                <label for="" class="form-label text-white">確認密碼</label>
+                                <input type="password" class="form-control" v-model="re_password"
+                                    :class="{'is-valid' : flag_repassword, 'is-invalid' : !flag_repassword }">
+                                <div class="valid-feedback">密碼相符</div>
+                                <div class="invalid-feedback">密碼不相符</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- 個人照 -->
+                            <div class="mt-4 shadow shadow-lg">
+                                <label for="" class="form-label text-white">請選擇上傳個人照:</label>
+                                <input type="file" class="form-control" @change="handlePhotoUpload">
+                                <div v-if="previewPhoto" class="mt-2 text-center">
+                                    <img :src="previewPhoto" class="rounded-circle"
+                                        style="width: 150px; height: 150px; object-fit: cover;" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 會員資料 -->
+                        <div class="hr-container">
+                            <h5 class="text-white text-center">會員資料</h5>
+                        </div>
+                        <div class="row">
+                            <!-- 姓名 -->
+                            <div class="col-md-3">
+                                <input type="text" placeholder="大名" class="form-control" v-model="realname" />
+                            </div>
+                            <!-- 性別 -->
+                            <div class="col-md-3 pt-1">
+                                <label for="" class="form-check-label text-white">男</label>
+                                <input type="radio" class="form-check-input form-check-inline" value="男"
+                                    v-model="gender">
+                                <label for="" class="form-check-label text-white">女</label>
+                                <input type="radio" class="form-check-input form-check-inline" value="女"
+                                    v-model="gender">
+                            </div>
+                            <!-- 信箱 -->
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" v-model="email"
+                                    :class="{'is-valid' : flag_email, 'is-invalid' : !flag_email }">
+                                <div class="valid-feedback">符合規定</div>
+                                <div class="invalid-feedback">不符合規定</div>
+                            </div>
+                            <!-- 居住地 -->
+                            <label for="" id="city_reg_label" class="form-label text-white mt-2"
+                                aria-placeholder="">居住地</label>
+                            <div class="col-md-6">
+                                <select class="form-select my-2" v-model="city">
+                                    <option value="" disabled>請選擇縣市</option>
+                                    <option v-for="c in cityOptions" :key="c.CityName" :value="c.CityName">{{
+                                        c.CityName }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-select my-2" v-model="district">
+                                    <option value="">請選擇行政區</option>
+                                    <option v-for="d in districtOptions" :key="d.AreaName" :value="d.AreaName">{{
+                                        d.AreaName }}</option>
+                                </select>
+                                <div class="invalid-feedback">請填入居住地</div>
+                            </div>
+                        </div>
+                        <!-- 註冊按鈕 -->
+                        <button class="btn btn-lg border-1 mt-3" @click="register">註冊</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商品 Modal -->
+        <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 fw-900" id="staticBackdropLabel">{{ p_name }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        商品內容
+                        <div class="text-center mb-3">
+                            <img :src="'img/product/' + p_photo" class="img-fluid rounded" style="max-height: 300px;"
+                                alt="商品圖片">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="text-primary">{{ p_name }}</h4>
+                                <p class="text-muted">價格：NT ${{ p_price }}</p>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">數量</label>
+                                    <div class="input-group" style="max-width: 200px;">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            @click="decreaseQuantity">－</button>
+                                        <input type="number" class="form-control text-center" v-model.number="quantity"
+                                            :min="1" :max="p_stock" @blur="correctQuantity" />
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            @click="increaseQuantity">＋</button>
+                                    </div>
+                                    <small class="text-danger" v-if="quantity > p_stock">⚠ 數量超過庫存 (剩 {{ p_stock }}
+                                        件)</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- <p>庫存數量：{{ p_stock }}</p> -->
+                        <!-- <p v-if="p_status == 1" class="text-success">狀態：上架中</p>
+                        <p v-else class="text-danger">狀態：已下架</p> -->
+                        <hr>
+                        <p>{{ p_description }}</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                        <button type="button" class="btn btn-primary" @click="addToCart">加入購物車</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 輪播 -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div id="carousel"></div>
+                </div>
+            </div>
+        </section>
+        <!-- 產品資料 -->
+        <section class="mt-5">
+            <div class="container">
+                <div class="row p-2">
+                    <div class="col-md-1">
+                        <aside class="text-center d-flex flex-column">
+                            <h5>商品分類</h5>
+                            <a href="#" @click.prevent="selectedCategory = '全部'"
+                                :class="{'fw-bold text-warning': selectedCategory === '全部'}"><small
+                                    class="text-secondary">全部</small></a>
+                            <a href="#" @click.prevent="selectedCategory = '服飾'"
+                                :class="{'fw-bold text-warning': selectedCategory === '服飾'}"><small
+                                    class="text-secondary">服飾</small></a>
+                            <a href="#" @click.prevent="selectedCategory = '鞋子'"
+                                :class="{'fw-bold text-warning': selectedCategory === '鞋子'}"><small
+                                    class="text-secondary">鞋子</small></a>
+                            <a href="#" @click.prevent="selectedCategory = '配件'"
+                                :class="{'fw-bold text-warning': selectedCategory === '配件'}"><small
+                                    class="text-secondary">配件</small></a>
+                            <a href="#" @click.prevent="selectedCategory = '吊飾'"
+                                :class="{'fw-bold text-warning': selectedCategory === '吊飾'}"><small
+                                    class="text-secondary">吊飾</small></a>
+                        </aside>
+                    </div>
+                    <div class="col-md-10 h-100 ms-3">
+                        <div id="web_product" class="row justify-content-start">
+                            <div class="col-md-3 m-4" v-for="item in filterProductforPage[currentPage]">
+                                <div class="card border-light" style="width: 16em; height: 400px;">
+                                    <img :src=" 'img/product/' + item.Photo " class="card-img-top"
+                                        style="height: 300px;">
+                                    <div class="card-body">
+                                        <hr>
+                                        <div class="me-5 d-flex">
+                                            <div>
+                                                <small>{{ item.Name }}</small>
+                                                <div>
+                                                    <span>NT: <span>{{ item.Price }}</span></span>
+                                                </div>
+                                            </div>
+                                            <div class="ms-auto text-end">
+                                                <button class="btn btn-danger" data-bs-target="#productModal"
+                                                    data-bs-toggle="modal" data-id="{{ item.Product_id }}"
+                                                    data-name="{{ item.Name }}" data-category="{{ item.Category }}"
+                                                    data-description="{{ item.Description }}"
+                                                    data-photo="{{ item.Photo }}" data-price="{{ item.Price }}"
+                                                    data-status="{{ item.Status }}"
+                                                    data-quanitity="{{ item.Stock_quantity }}"
+                                                    @click="showdata(item)">購買</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 頁數列 -->
+                <div class="row justify-content-center my-5">
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center text-center">
+                            <!-- 上一頁 -->
+                            <li class="page-item" :class="{'disabled' : currentPage == 0}">
+                                <a href="" class="page-link" @click.prevent="currentPage = currentPage -1">Previous</a>
+                            </li>
+                            <!-- 目前頁數 -->
+                            <li class="page-item" v-for="item in filterProductforPage.length">
+                                <a href="#" class="page-link" :class="{'active' : item-1 == currentPage }" href="#"
+                                    @click.prevent="currentPage = item-1">{{ item }}</a>
+                            </li>
+                            <!-- 下一頁 -->
+                            <li class="page-item" :class="{'disabled' : currentPage+1 == filterProductforPage.length }">
+                                <a href="#" class="page-link" @click.prevent=" currentPage = currentPage+1">NEXT</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+        </section>
+        <!-- footer -->
+        <div id="footer"></div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- axios  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+    <script>
+        const App = {
+            data() {
+                return {
+                    // 註冊會員
+                    username: '',
+                    password: '',
+                    re_password: '',
+                    realname: '',
+                    gender: '',
+                    email: '',
+                    city: '',
+                    district: '',
+                    cityOptions: [],
+                    districtOptions: [],
+                    photoFile: null,
+                    previewPhoto: '',
+                    flag_username: false,
+                    flag_password: false,
+                    flag_repassword: false,
+                    flag_email: false,
+                    username_validfeedback: '',
+                    username_invalidfeedback: '',
+                    // 登入
+                    loginForm: {
+                        username: '',
+                        password: '',
+                    },
+                    member: null,
+                    isUsernameValid: true,
+                    isPasswordValid: true,
+                    // 產品渲染
+                    productList: [],
+                    filterProductDataforPage: [],
+                    productListforPage: [],
+                    currentPage: 0,
+                    //過濾篩選 
+                    selectedCategory: '全部',
+                    // Modal 資料欄位
+                    p_id: '',
+                    p_name: '',
+                    p_photo: '',
+                    p_price: '',
+                    p_description: '',
+                    p_stock: '',
+                    p_status: '',
+                    quantity: 1, // 加入購物車商品數量
+                    // 購物車華顯示控制
+                    showCartSidebar: false,
+                    removingIndex: null,
+                    cart: [],
+                }
+            },
+            created() {
+                const vm = this;
+                // 渲染產品資料
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/product_control_api_v1.php?action=getdata',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        vm.productList = data.data;
+                    },
+                    error: vm.api_error
+                });
+
+                // 載入購物車資料
+                const storedCart = localStorage.getItem('cart');
+                if (storedCart) {
+                    this.cart = JSON.parse(storedCart);
+                }
+            },
+            watch: {
+                city(newVal) {
+                    const selected = this.cityOptions.find(c => c.CityName === newVal);
+                    this.districtOptions = selected ? selected.AreaList : [];
+                    this.district = '';
+                },
+                username: function (newValue) {
+                    const vm = this;
+                    // console.log(newValue);
+                    // const rule = /[a-z]/; //要包含英文字母
+                    // const rule = /a/; //要包含英文字母a
+                    // const rule = /A/; //要包含英文字母A
+                    // const rule = /a./; //要包含英文字母a且不可以在最後
+
+                    // 1.至少8個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.少於15個字元
+                    const rules = /^[a-zA-Z0-9]{6,15}$/;
+
+                    // console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        var JSONdata = {};
+                        JSONdata["username"] = newValue;
+                        // console.log(JSON.stringify(JSONdata));
+
+                        // 傳遞至後端確認品名是否可以使用 (是否重複)
+                        $.ajax({
+                            type: "POST",
+                            url: "api/member_control_api_v1.php?action=checkuni",
+                            dataType: "json",
+                            data: JSON.stringify(JSONdata),
+                            success: function (data) {
+                                // console.log(data);
+                                if (data.state) {
+                                    vm.flag_username = true;
+                                    vm.username_validfeedback = data.message;
+                                } else {
+                                    vm.flag_username = false;
+                                    vm.username_invalidfeedback = data.message;
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "API介接錯誤!",
+                                    text: "member_login_control_v1.php?action=checkuni",
+                                    icon: "error"
+                                });
+                            }
+                        });
+
+                    } else {
+                        vm.flag_username = false;
+                        vm.username_invalidfeedback = '帳號不符合規定';
+                    }
+                },
+                password: function (newValue) {
+                    const vm = this;
+
+                    // 1.至少8-15個字元
+                    // 2.要有大小寫字母
+                    // 3.至少一個數字
+                    // 4.特殊符號
+                    vm.flag_repassword = false;
+                    const rules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,15}$/;
+
+                    // console.log(rules.test(newValue));
+                    if (rules.test(newValue)) {
+                        vm.flag_password = true;
+                    } else {
+                        vm.flag_password = false;
+                    }
+                },
+                re_password: function (newValue) {
+                    const vm = this;
+                    if (vm.re_password == vm.password) {
+                        vm.flag_repassword = true;
+                    } else {
+                        vm.flag_repassword = false;
+                    }
+                },
+                email: function (newValue) {
+                    const vm = this;
+                    const rules = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+
+                    if (rules.test(newValue)) {
+                        vm.flag_email = true;
+                    } else {
+                        vm.flag_email = false;
+                    }
+                }
+            },
+            methods: {
+                handlePhotoUpload(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.photoFile = file;
+                        this.previewPhoto = URL.createObjectURL(file);
+                    }
+                },
+                async register() {
+                    const vm = this;
+                    if (vm.flag_username && vm.flag_password && vm.flag_repassword && vm.flag_email && vm.realname && vm.gender && vm.city && vm.district && vm.photoFile) {
+                        //傳遞至後端API執行註冊行為
+
+                        const formData = new FormData();
+                        formData.append('photo', this.photoFile);
+
+                        try {
+                            const uploadRes = await axios.post('api/member_photoupload_api_v1.php', formData);
+                            if (!uploadRes.data.state) {
+                                return Swal.fire('圖片上傳失敗', '', 'error');
+                            }
+
+                            const photoFilename = uploadRes.data.filename;
+                            // const payload = {
+                            //     username: this.username,
+                            //     password: this.password,
+                            //     email: this.email,
+                            //     name: this.realName,
+                            //     gender: this.gender,
+                            //     city: this.city,
+                            //     region: this.district,
+                            //     photo: photoFilename
+                            // };
+                            var JSONdata = {};
+                            JSONdata["username"] = vm.username;
+                            JSONdata["password"] = vm.password;
+                            JSONdata["photo"] = photoFilename;
+                            JSONdata["name"] = vm.realname;
+                            JSONdata["gender"] = vm.gender;
+                            JSONdata["email"] = vm.email;
+                            JSONdata["city"] = vm.city;
+                            JSONdata["region"] = vm.district;
+                            console.log(JSON.stringify(JSONdata));
+
+                            const registerRes = await axios.post('api/member_control_api_v1.php?action=register', JSON.stringify(JSONdata));
+                            const data = registerRes.data;
+                            // Swal.fire(data.message, '', data.state ? 'success' : 'error');
+                            if (data.state) {
+                                // 儲存登入資訊
+                                localStorage.setItem('member', JSON.stringify(data.data));
+                                vm.setCookie("UID01", data.data.UID01, 7);
+
+                                // UI 顯示登入狀態
+                                document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                $("#navbar_username_showtext").removeClass("d-none");
+                                $("#navbar_btn_login").addClass("d-none");
+                                $("#navbar_btn_logout").removeClass("d-none");
+
+                                if (data.data.Role === "M") {
+                                    $("#manager_function").removeClass("d-none");
+                                }
+                                $("#normal_member_function").removeClass("d-none");
+
+                                Swal.fire(data.message, '', 'success');
+                                bootstrap.Modal.getOrCreateInstance(document.getElementById('registerModal')).hide();
+                                // bootstrap.Modal.getOrCreateInstance(document.getElementById('loginModal')).show();
+                            } else {
+                                Swal.fire(data.message, '', 'error');
+                            }
+                        } catch (err) {
+                            Swal.fire('註冊流程發生錯誤', '', 'error');
+                        }
+                    }
+
+                },
+                validateLoginForm() {
+                    this.isUsernameValid = this.loginForm.username.length > 0;
+                    this.isPasswordValid = this.loginForm.password.length > 0;
+                    return this.isUsernameValid && this.isPasswordValid;
+                },
+
+                login() {
+                    if (!this.validateLoginForm()) {
+                        Swal.fire("請確認帳號與密碼是否填寫", '', 'warning');
+                        return;
+                    }
+
+                    axios.post('api/member_control_api_v1.php?action=login', this.loginForm)
+                        .then(res => {
+                            const data = res.data;
+                            if (data.state) {
+                                Swal.fire({
+                                    title: data.message,
+                                    text: `${data.data.RealName} 歡迎登入`,
+                                    icon: 'success'
+                                }).then(() => {
+                                    this.setCookie("UID01", data.data.UID01, 7);
+                                    // ✅ 寫入 localStorage
+                                    localStorage.setItem('member', JSON.stringify(data.data));
+                                    $("#loginModal").modal("hide");
+                                    // 顯示會員資訊
+                                    document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                    document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                    $("#navbar_username_showtext").removeClass("d-none");
+                                    $("#navbar_btn_login").addClass("d-none");
+                                    $("#navbar_btn_logout").removeClass("d-none");
+
+                                    if (data.data.Role === "M") {
+                                        $("#manager_function").removeClass("d-none");
+                                    }
+                                    $("#normal_member_function").removeClass("d-none");
+                                });
+                            } else {
+                                Swal.fire(data.message, '', 'error');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire("登入失敗", "API 錯誤", "error");
+                        });
+                },
+                checkLogin() {
+                    const uid = this.getCookie("UID01");
+                    // 從localStorage取得登入資料
+                    const savedMember = localStorage.getItem('member');
+                    if (savedMember) {
+                        this.member = JSON.parse(savedMember);
+                    }
+                    if (!uid) return;
+
+                    axios.post('api/member_control_api_v1.php?action=checkuid', {
+                        uid01: uid
+                    })
+                        .then(res => {
+                            const data = res.data;
+                            if (data.state) {
+                                this.member = data.data;
+                                // 顯示會員資訊
+                                document.getElementById("navbar_memberPhoto").src = "img/member/" + data.data.Photo;
+                                document.getElementById("navbar_username_text").innerText = data.data.RealName;
+                                $("#navbar_username_showtext").removeClass("d-none");
+                                $("#navbar_btn_login").addClass("d-none");
+                                $("#navbar_btn_logout").removeClass("d-none");
+
+                                if (data.data.Role === "M") {
+                                    $("#manager_function").removeClass("d-none");
+                                }
+                                $("#normal_member_function").removeClass("d-none");
+                            }
+                        });
+                },
+                logout() {
+                    Swal.fire({
+                        title: "確認是否要登出?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "確認",
+                        cancelButtonText: "取消"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // 刪除 cookie
+                            this.setCookie("UID01", "", -1);
+                            this.member = null;
+                            Swal.fire("您已登出!", "", "success").then(() => {
+                                location.href = "index.html";
+                            });
+                        }
+                    });
+                },
+                setCookie(cname, cvalue, exdays) {
+                    const d = new Date();
+                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                    document.cookie = `${cname}=${cvalue};expires=${d.toUTCString()};path=/`;
+                },
+                getCookie(cname) {
+                    let name = cname + "=";
+                    let ca = document.cookie.split(';');
+                    for (let c of ca) {
+                        while (c.charAt(0) == ' ') c = c.substring(1);
+                        if (c.indexOf(name) == 0) return c.substring(name.length);
+                    }
+                    return "";
+                },
+                api_error() {
+                    Swal.fire({
+                        title: "API介接錯誤!",
+                        text: "member_control.api.v1.php",
+                        icon: "error"
+                    });
+                },
+                showdata(item) {
+                    const vm = this;
+                    vm.p_id = item.Product_id;
+                    console.log(item);
+                    vm.p_name = item.Name;
+                    vm.p_photo = item.Photo;
+                    vm.p_price = item.Price;
+                    vm.p_description = item.Description;
+                    vm.p_stock = item.Stock_quantity;
+                    vm.p_status = item.Status;
+
+                    // 每次開啟商品視窗時預設為 1
+                    this.quantity = 1;
+                },
+                // 增加加入購物車商品數量
+                increaseQuantity() {
+                    if (this.quantity < this.p_stock) {
+                        this.quantity++;
+                    }
+                },
+                // 減少加入購物車商品數量
+                decreaseQuantity() {
+                    if (this.quantity > 1) {
+                        this.quantity--;
+                    }
+                },
+                correctQuantity() {
+                    if (this.quantity < 1) this.quantity = 1;
+                    if (this.quantity > this.p_stock) this.quantity = this.p_stock;
+                },
+                // 加入購物車
+                addToCart() {
+                    if (this.quantity <= 0 || isNaN(this.quantity)) {
+                        Swal.fire('請輸入有效的數量', '', 'warning');
+                        return;
+                    }
+
+                    if (this.quantity > this.p_stock) {
+                        Swal.fire('庫存不足', `最多可購買 ${this.p_stock} 件`, 'warning');
+                        return;
+                    }
+
+                    const existingItem = this.cart.find(item => item.Product_id === this.p_id);
+                    if (existingItem) {
+                        const totalQuantity = existingItem.quantity + this.quantity;
+                        if (totalQuantity > this.p_stock) {
+                            Swal.fire('庫存不足', `目前已購買 ${existingItem.quantity} 件，最多還能購買 ${this.p_stock - existingItem.quantity} 件`, 'warning');
+                            return;
+                        }
+                        existingItem.quantity += this.quantity;
+                    } else {
+                        this.cart.push({
+                            Product_id: this.p_id,
+                            Name: this.p_name,
+                            Price: this.p_price,
+                            Photo: this.p_photo,
+                            quantity: this.quantity
+                        });
+                    }
+
+                    localStorage.setItem('cart', JSON.stringify(this.cart));
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '已加入購物車',
+                        text: `${this.p_name} × ${this.quantity} 件 已加入購物車`,
+                        timer: 1000,
+                        showConfirmButton: false
+                    });
+
+                    // 關閉 Modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('productModal'));
+                    if (modal) modal.hide();
+                    // 重設數量
+                    this.quantity = 1;
+                },
+                // 控制購物車商品數量
+                increaseCartQty(index) {
+                    const item = this.cart[index];
+                    // 這裡你可以依商品資料加上最大庫存限制 (可搭配後端補進來)
+                    item.quantity++;
+                    this.saveCart();
+                },
+
+                decreaseCartQty(index) {
+                    const item = this.cart[index];
+                    if (item.quantity > 1) {
+                        item.quantity--;
+                        this.saveCart();
+                    } else {
+                        Swal.fire({
+                            title: '確認要從購物車移除嗎？',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: '移除',
+                            cancelButtonText: '取消'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.removeFromCart(index);
+                            }
+                        });
+                    }
+                },
+
+                correctCartQty(index) {
+                    const item = this.cart[index];
+                    if (item.quantity < 1 || isNaN(item.quantity)) {
+                        item.quantity = 1;
+                    }
+                    this.saveCart();
+                },
+
+                saveCart() {
+                    localStorage.setItem('cart', JSON.stringify(this.cart));
+                },
+                // 刪除商品
+                removeFromCart(index) {
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: '移除商品',
+                        text: '確定要移除此商品?'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.removingIndex = index; // 加入動畫 class
+
+                            // 延遲實際刪除
+                            setTimeout(() => {
+                                this.cart.splice(index, 1);
+                                localStorage.setItem('cart', JSON.stringify(this.cart));
+                                this.removingIndex = null;
+                            }, 400); // 動畫時間一致
+                        }
+                    });
+
+                },
+                toggleCartSidebar(status) {
+                    this.showCartSidebar = status;
+                },
+                // 
+                checkout() {
+                    const vm = this;
+                    if (vm.cart.length === 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '購物車是空的！',
+                            text: '請先加入商品再結帳'
+                        });
+                        return;
+                    }
+
+                    // 會員登入檢查
+                    const member = JSON.parse(localStorage.getItem('member') || 'null');
+                    if (!member) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '請先登入會員',
+                            text: '登入後才能進行結帳喔～',
+                            confirmButtonText: '前往登入'
+                        }).then(() => {
+                            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                            loginModal.show();
+                        });
+                        return;
+                    }
+
+                    // 發送購物車與會員資料給後端
+                    // 結帳流程（登入者才執行）
+                    axios.post('api/order_api.php', {
+                        cart: this.cart,
+                        member_id: member.ID,
+                        member_username: member.Username
+                    }).then(res => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '訂單已送出！',
+                            text: '謝謝您的購買～'
+                        });
+
+                        this.cart = [];
+                        localStorage.removeItem('cart');
+                    }).catch(err => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '結帳失敗！',
+                            text: '請稍後再試'
+                        });
+                    });
+                }
+
+            },
+            computed: {
+                filterProductforPage() {
+                    const filtered = this.selectedCategory === '全部'
+                        ? this.productList
+                        : this.productList.filter(item => item.Category === this.selectedCategory);
+
+                    // 分頁邏輯（每 9 筆一頁）
+                    let newData = [];
+                    filtered.forEach((item, index) => {
+                        if (index % 9 === 0) {
+                            newData.push([]);
+                        }
+                        const page = Math.floor(index / 9);
+                        newData[page].push(item);
+                    });
+                    return newData;
+                },
+                // 過濾篩選
+                filteredProducts() {
+                    if (this.filterCategory === '全部') return this.productList;
+                    return this.productList.filter(p => p.Category === this.filterCategory);
+                },
+                cartTotalQty() {
+                    return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                },
+                // 購物車總金額
+                cartTotal() {
+                    return this.cart.reduce((total, item) => total + item.quantity * item.Price, 0);
+                }
+            },
+            mounted() {
+                this.checkLogin();
+                axios.get('js/CityCountyData.json')
+                    .then(res => {
+                        this.cityOptions = res.data;
+                    })
+                    .catch(() => {
+                        Swal.fire('載入縣市資料失敗', '', 'error');
+                    });
+
+            }
+        }
+        Vue.createApp(App).mount('#web');
+    </script>
+</body>
+
+</html>
