@@ -7,8 +7,9 @@
 ## 🏠 首頁功能介紹
 
 - 🛒 商品瀏覽
+- (./screenshot/product.png) 
 - 🔐 會員登入 / 註冊
-
+(./screenshot/login.png) (./screenshot/regist.png) 
 ---
 
 ## 🛠️ 管理後臺功能
